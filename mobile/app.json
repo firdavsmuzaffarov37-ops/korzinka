@@ -4,9 +4,12 @@
     "slug": "savdox-marketplace",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
     "scheme": "savdox",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./src/assets/icon.png",
+      "resizeMode": "contain",
       "backgroundColor": "#059669"
     },
     "ios": {
@@ -16,6 +19,7 @@
     "android": {
       "package": "uz.savdox.marketplace",
       "adaptiveIcon": {
+        "foregroundImage": "./src/assets/icon.png",
         "backgroundColor": "#059669"
       }
     },
@@ -24,4 +28,3 @@
     ]
   }
 }
-

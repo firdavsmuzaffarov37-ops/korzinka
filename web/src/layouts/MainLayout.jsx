@@ -89,9 +89,11 @@ export default function MainLayout() {
           {/* SAVDOX Brand Logo & City Selector */}
           <div className="flex items-center gap-3 shrink-0">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition">
-                S
-              </div>
+              <img
+                src="/savdox-icon.png"
+                alt="SAVDOX Icon"
+                className="w-11 h-11 rounded-2xl object-contain shadow-sm group-hover:scale-105 transition"
+              />
               <div>
                 <span className="text-xl font-black tracking-tight text-emerald-950 block leading-none">
                   SAVDO<span className="text-emerald-600">X</span>
@@ -457,9 +459,11 @@ export default function MainLayout() {
         <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2 space-y-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-black text-lg">
-                S
-              </div>
+              <img
+                src="/savdox-icon.png"
+                alt="SAVDOX Icon"
+                className="w-10 h-10 rounded-xl object-contain bg-white p-0.5 shadow-sm"
+              />
               <span className="text-xl font-black text-white tracking-tight">SAVDOX</span>
             </div>
             <p className="text-sm text-emerald-200/80 max-w-sm leading-relaxed">

@@ -141,8 +141,18 @@ export default function AuthPage({ defaultMode = 'login' }) {
         {/* Left Brand Panel */}
         <div className="lg:col-span-5 bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 text-white p-8 flex flex-col justify-between">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-bold border border-white/20">
-              <Sparkles className="w-3.5 h-3.5" /> SAVDOX ID
+            <div className="flex items-center gap-3">
+              <img
+                src="/savdox-icon.png"
+                alt="SAVDOX Icon"
+                className="w-14 h-14 rounded-2xl object-contain bg-white p-1 shadow-lg"
+              />
+              <div>
+                <div className="text-xl font-black tracking-tight">SAVDOX</div>
+                <div className="inline-flex items-center gap-1 text-emerald-300 text-xs font-bold">
+                  <Sparkles className="w-3 h-3" /> SAVDOX ID
+                </div>
+              </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
               {t.tagline}
