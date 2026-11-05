@@ -69,16 +69,16 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between gap-2.5 sm:gap-3">
         <div>
           {/* Seller & Rating Row */}
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+          <div className="flex items-center justify-between text-[11px] sm:text-xs text-slate-500 mb-1 sm:mb-1.5">
             <span className="inline-flex items-center gap-1 font-medium text-emerald-800 truncate max-w-[65%]">
-              <Store className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <Store className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0" />
               <span className="truncate">{product.sellerName}</span>
             </span>
             <span className="inline-flex items-center gap-1 font-semibold text-slate-700 shrink-0">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
               {product.rating}
               <span className="text-slate-400 font-normal">({product.reviewCount})</span>
             </span>
@@ -87,28 +87,28 @@ export default function ProductCard({ product }) {
           {/* Product Name */}
           <Link
             to={`/product/${product.id}`}
-            className="text-sm font-semibold text-slate-900 hover:text-emerald-700 line-clamp-2 leading-snug min-h-[2.5rem] transition-colors"
+            className="text-xs sm:text-sm font-semibold text-slate-900 hover:text-emerald-700 line-clamp-2 leading-snug min-h-[2.2rem] sm:min-h-[2.5rem] transition-colors"
           >
             {title}
           </Link>
 
           {/* 0% Installment Pill */}
-          <div className="mt-2">
-            <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[11px] font-medium border border-emerald-100">
+          <div className="mt-1.5 sm:mt-2">
+            <span className="inline-block px-1.5 sm:px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[10px] sm:text-[11px] font-medium border border-emerald-100">
               {monthlyUzs.toLocaleString('en-US')} {t.perMonth}
             </span>
           </div>
         </div>
 
         {/* Price & Add to Cart Row */}
-        <div className="pt-2 border-t border-slate-100 flex items-end justify-between gap-2">
+        <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
           <div>
             {product.oldPriceUzs && product.oldPriceUzs > product.priceUzs && (
-              <div className="text-xs text-slate-400 line-through">
+              <div className="text-[10px] sm:text-xs text-slate-400 line-through">
                 {formatUzs(product.oldPriceUzs, lang)}
               </div>
             )}
-            <div className="text-base font-extrabold text-emerald-700 tracking-tight">
+            <div className="text-sm sm:text-base font-extrabold text-emerald-700 tracking-tight">
               {formatUzs(product.priceUzs, lang)}
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function ProductCard({ product }) {
           <button
             type="button"
             onClick={() => addToCart(product)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+            className={`w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm ${
               inCartCount > 0
                 ? 'bg-emerald-900 text-white hover:bg-emerald-800'
                 : 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-95'

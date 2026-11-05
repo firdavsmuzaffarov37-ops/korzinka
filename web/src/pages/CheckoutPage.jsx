@@ -235,6 +235,7 @@ export default function CheckoutPage() {
                 lng={coords.lng}
                 onSelectLocation={(newCoords) => setCoords(newCoords)}
                 mode="checkout"
+                lang={lang}
               />
             </div>
           </div>

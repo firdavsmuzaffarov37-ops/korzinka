@@ -40,6 +40,7 @@ export default function CatalogPage() {
   const [onlyFlash, setOnlyFlash] = useState(initialFlash);
   const [onlyFavorites, setOnlyFavorites] = useState(initialFavs);
   const [sortBy, setSortBy] = useState('popular');
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   useEffect(() => {
     setSelectedCategory(searchParams.get('category') || 'all');
@@ -237,9 +238,35 @@ export default function CatalogPage() {
         </div>
       )}
 
+      {/* Mobile/Tablet Filter Accordion Toggle */}
+      <div className="lg:hidden flex items-center justify-between p-3.5 bg-white rounded-2xl border border-slate-200 shadow-soft">
+        <button
+          type="button"
+          onClick={() => setShowFiltersMobile(!showFiltersMobile)}
+          className="flex items-center gap-2 text-xs font-black text-slate-800"
+        >
+          <SlidersHorizontal className="w-4 h-4 text-emerald-600" />
+          <span>{t.filters}</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">
+            {showFiltersMobile ? '▲ Yopish' : '▼ Ochish'}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={handleResetFilters}
+          className="text-xs font-bold text-rose-600 hover:underline inline-flex items-center gap-1"
+        >
+          <RotateCcw className="w-3 h-3" /> {t.clearFilters}
+        </button>
+      </div>
+
       {/* Main Content Layout: Left Filter Sidebar + Right Product Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <aside className="lg:col-span-3 rounded-3xl bg-white border border-slate-200 p-5 shadow-soft space-y-5">
+        <aside
+          className={`lg:col-span-3 rounded-3xl bg-white border border-slate-200 p-5 shadow-soft space-y-5 ${
+            showFiltersMobile ? 'block' : 'hidden lg:block'
+          }`}
+        >
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-emerald-600" />
@@ -445,7 +472,7 @@ export default function CatalogPage() {
           </div>
 
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-5">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

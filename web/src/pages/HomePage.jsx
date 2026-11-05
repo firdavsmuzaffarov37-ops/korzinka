@@ -286,7 +286,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {flashSaleProducts.map((prod) => (
             <ProductCard key={prod.id} product={prod} />
           ))}
@@ -364,7 +364,7 @@ export default function HomePage() {
             {t.viewAll} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
           {popularProducts.map((prod) => (
             <ProductCard key={prod.id} product={prod} />
           ))}
@@ -389,7 +389,7 @@ export default function HomePage() {
             {t.seeTopRated} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
           {bestSellers.map((prod) => (
             <ProductCard key={prod.id} product={prod} />
           ))}
@@ -474,7 +474,7 @@ export default function HomePage() {
             {t.recommendedForYou}
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
           {recommendedProducts.map((prod) => (
             <ProductCard key={prod.id} product={prod} />
           ))}
@@ -489,7 +489,7 @@ export default function HomePage() {
               {t.recentlyViewed}
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
             {recentProducts.map((prod) => (
               <ProductCard key={prod.id} product={prod} />
             ))}
