@@ -480,3 +480,4 @@ CREATE POLICY "Admins full access products" ON public.products FOR ALL USING (pu
 CREATE POLICY "Admins full access orders" ON public.orders FOR ALL USING (public.is_admin());
 CREATE POLICY "Admins full access coupons" ON public.coupons FOR ALL USING (public.is_admin());
 CREATE POLICY "Admins full access complaints" ON public.complaints FOR ALL USING (public.is_admin());
+

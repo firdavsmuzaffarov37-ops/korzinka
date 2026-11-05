@@ -1,0 +1,14 @@
+{
+  "name": "savdox-marketplace-monorepo",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "SAVDOX — Premium Multi-Vendor E-Commerce Marketplace for Uzbekistan (Web + Mobile + Shared + Supabase)",
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "preview": "npm --prefix web run preview",
+    "mobile": "npm --prefix mobile run start"
+  }
+}
+

@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "SAVDOX Marketplace",
+    "slug": "savdox-marketplace",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "savdox",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#059669"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "uz.savdox.marketplace"
+    },
+    "android": {
+      "package": "uz.savdox.marketplace",
+      "adaptiveIcon": {
+        "backgroundColor": "#059669"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
+

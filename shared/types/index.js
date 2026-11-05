@@ -107,3 +107,4 @@ export const LOYALTY_TIERS = [
   { name: 'Gold', minPoints: 50000, cashbackPercent: 3.5, perk: '3.5% Cashback + Free Standard Delivery' },
   { name: 'Platinum', minPoints: 150000, cashbackPercent: 5, perk: '5% Cashback + Free Express 90m Delivery + VIP Support' },
 ];
+

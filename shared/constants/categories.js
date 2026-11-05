@@ -197,3 +197,4 @@ export const CATEGORIES = [
     filterOptions: ['Material', 'Water Resistance', 'Compatibility', 'Gender', 'Brand'],
   },
 ];
+
