@@ -6,29 +6,28 @@ import {
   Lock,
   User,
   MapPin,
-  ShieldCheck,
   KeyRound,
   CheckCircle2,
   Sparkles,
   LogIn,
   UserPlus,
+  ArrowLeft,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { UZBEKISTAN_CITIES } from '@shared/types';
 
 export default function AuthPage({ defaultMode = 'login' }) {
-  const { user, setUser, lang, t, showToast, supabase } = useMarketplace();
+  const { setUser, lang, setLang, t, showToast, supabase, toast } = useMarketplace();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Determine mode from route (/login, /register, /auth)
   const routeMode = location.pathname.includes('register')
     ? 'register'
     : location.pathname.includes('login')
     ? 'login'
     : defaultMode;
 
-  const [view, setView] = useState(routeMode); // 'login' | 'register' | 'otp' | 'recovery' | 'profile'
+  const [view, setView] = useState(routeMode); // 'login' | 'register' | 'otp'
   const [loginMethod, setLoginMethod] = useState('phone'); // 'phone' | 'email'
   const [phone, setPhone] = useState('+998 90 ');
   const [email, setEmail] = useState('');
@@ -87,7 +86,6 @@ export default function AuthPage({ defaultMode = 'login' }) {
         }
       }
 
-      // Send OTP step
       setOtpDigits(['4', '8', '2', '9', '1', '5']);
       showToast(
         lang === 'uz'
@@ -107,9 +105,7 @@ export default function AuthPage({ defaultMode = 'login' }) {
     const code = otpDigits.join('');
     if (code.length < 6) {
       showToast(
-        lang === 'uz'
-          ? '6 xonali kodni toʻliq kiriting'
-          : 'Enter all 6 digits',
+        lang === 'uz' ? '6 xonali kodni toʻliq kiriting' : 'Enter all 6 digits',
         'error'
       );
       return;
@@ -136,12 +132,48 @@ export default function AuthPage({ defaultMode = 'login' }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-12 rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-xl">
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 px-4 py-8">
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-emerald-950 text-white text-xs font-bold shadow-xl border border-emerald-500/40 animate-bounce">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{toast.message}</span>
+        </div>
+      )}
+
+      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-2xl">
         {/* Left Brand Panel */}
         <div className="lg:col-span-5 bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 text-white p-8 flex flex-col justify-between">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-200 hover:text-white transition"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>{t.home}</span>
+              </Link>
+
+              {/* Compact Language Pill */}
+              <div className="inline-flex items-center bg-emerald-900/90 rounded-lg p-0.5 border border-emerald-700">
+                {['uz', 'ru', 'en'].map((code) => (
+                  <button
+                    key={code}
+                    type="button"
+                    onClick={() => setLang(code)}
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase transition ${
+                      lang === code
+                        ? 'bg-emerald-500 text-slate-950'
+                        : 'text-emerald-200 hover:text-white'
+                    }`}
+                  >
+                    {code}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
               <img
                 src="/savdox-icon.png"
                 alt="SAVDOX Icon"
@@ -154,6 +186,7 @@ export default function AuthPage({ defaultMode = 'login' }) {
                 </div>
               </div>
             </div>
+
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
               {t.tagline}
             </h1>
@@ -179,7 +212,7 @@ export default function AuthPage({ defaultMode = 'login' }) {
         </div>
 
         {/* Right Form Area */}
-        <div className="lg:col-span-7 p-7 sm:p-9">
+        <div className="lg:col-span-7 p-7 sm:p-9 flex flex-col justify-center">
           {/* Top Switcher Tabs: Login vs Register */}
           <div className="flex rounded-2xl bg-slate-100 p-1 mb-6">
             <Link

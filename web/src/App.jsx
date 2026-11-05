@@ -18,6 +18,12 @@ export default function App() {
     <MarketplaceProvider>
       <BrowserRouter>
         <Routes>
+          {/* Standalone Full-Screen Auth Routes (No Navbar & No Footer) */}
+          <Route path="/login" element={<AuthPage defaultMode="login" />} />
+          <Route path="/register" element={<AuthPage defaultMode="register" />} />
+          <Route path="/auth" element={<AuthPage defaultMode="login" />} />
+
+          {/* Main Marketplace Routes with Header & Footer */}
           <Route path="/" element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path="catalog" element={<CatalogPage />} />
@@ -28,9 +34,6 @@ export default function App() {
             <Route path="seller" element={<SellerDashboardPage />} />
             <Route path="admin" element={<AdminDashboardPage />} />
             <Route path="bonus" element={<SavdoxBonusPage />} />
-            <Route path="login" element={<AuthPage defaultMode="login" />} />
-            <Route path="register" element={<AuthPage defaultMode="register" />} />
-            <Route path="auth" element={<AuthPage defaultMode="login" />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
