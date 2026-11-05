@@ -15,7 +15,8 @@ import {
   Globe,
   Home,
   CheckCircle2,
-  Database,
+  LogIn,
+  UserPlus,
   X,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
@@ -31,8 +32,6 @@ export default function MainLayout() {
     selectedCity,
     setSelectedCity,
     user,
-    setUser,
-    isSupabaseConfigured,
     categories,
     products,
     cart,
@@ -75,24 +74,45 @@ export default function MainLayout() {
     navigate(`/catalog?q=${encodeURIComponent(q)}`);
   };
 
+  const cityName =
+    lang === 'uz'
+      ? selectedCity.nameUz
+      : lang === 'ru'
+      ? selectedCity.nameRu
+      : selectedCity.nameEn;
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50/60 text-slate-900 pb-16 lg:pb-0">
-      {/* Top Utility Bar */}
-      <div className="bg-emerald-950 text-emerald-50 text-xs border-b border-emerald-900">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
-          {/* Left: Location Selector & Promo */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-200">{t.deliverTo}</span>
+      {/* Main Clean White Sticky Header (Top Dark Green Bar Removed) */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between gap-3">
+          {/* SAVDOX Brand Logo & City Selector */}
+          <div className="flex items-center gap-3 shrink-0">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition">
+                S
+              </div>
+              <div>
+                <span className="text-xl font-black tracking-tight text-emerald-950 block leading-none">
+                  SAVDO<span className="text-emerald-600">X</span>
+                </span>
+                <span className="text-[10px] font-semibold text-slate-500 tracking-wide hidden sm:block">
+                  {t.brandSubtitle}
+                </span>
+              </div>
+            </Link>
+
+            {/* Clean City Dropdown inside Main Header */}
+            <div className="hidden xl:flex items-center gap-1 bg-slate-100 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs">
+              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <select
-                aria-label="Select delivery city"
+                aria-label={t.deliverTo}
                 value={selectedCity.id}
                 onChange={(e) => {
                   const found = UZBEKISTAN_CITIES.find((c) => c.id === e.target.value);
                   if (found) setSelectedCity(found);
                 }}
-                className="bg-emerald-900/90 text-white font-bold px-2 py-0.5 rounded-md border border-emerald-700 focus:outline-none cursor-pointer"
+                className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
               >
                 {UZBEKISTAN_CITIES.map((city) => (
                   <option key={city.id} value={city.id}>
@@ -101,101 +121,19 @@ export default function MainLayout() {
                 ))}
               </select>
             </div>
-
-            <span className="hidden md:inline-block text-emerald-200/90">
-              {t.freeDeliveryBanner}
-            </span>
           </div>
-
-          {/* Right: Backend Status, Role Switcher, Bonus, Language Switcher */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span
-              title={
-                isSupabaseConfigured
-                  ? 'Connected to live Supabase PostgreSQL instance'
-                  : 'Running with local persisted Uzbekistan marketplace dataset (Configure VITE_SUPABASE_URL for live cloud DB)'
-              }
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-900/80 text-emerald-200 border border-emerald-700/70"
-            >
-              <Database className="w-3 h-3 text-emerald-400" />
-              {isSupabaseConfigured ? 'Supabase Cloud' : 'Sandbox Dataset'}
-            </span>
-
-            <Link
-              to="/bonus"
-              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 font-semibold hover:bg-amber-400/30 transition"
-            >
-              <Gift className="w-3.5 h-3.5" />
-              <span>{bonusWallet.pointsBalance.toLocaleString()} Bonus</span>
-            </Link>
-
-            <Link
-              to="/seller"
-              className="hover:text-emerald-300 font-semibold inline-flex items-center gap-1"
-            >
-              <Store className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{t.sellerHub}</span>
-            </Link>
-
-            <Link
-              to="/admin"
-              className="hover:text-emerald-300 font-semibold inline-flex items-center gap-1"
-            >
-              <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{t.adminPanel}</span>
-            </Link>
-
-            {/* Trilingual Switcher: UZ / RU / EN */}
-            <div className="inline-flex items-center bg-emerald-900 rounded-lg p-0.5 border border-emerald-800">
-              <Globe className="w-3.5 h-3.5 text-emerald-300 ml-1.5 mr-1" />
-              {['uz', 'ru', 'en'].map((code) => (
-                <button
-                  key={code}
-                  type="button"
-                  onClick={() => setLang(code)}
-                  className={`px-2 py-0.5 rounded-md text-[11px] font-bold uppercase transition ${
-                    lang === code
-                      ? 'bg-emerald-500 text-slate-950'
-                      : 'text-emerald-200 hover:text-white'
-                  }`}
-                >
-                  {code}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Sticky Desktop Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between gap-3 lg:gap-5">
-          {/* SAVDOX Brand Logo */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition">
-              S
-            </div>
-            <div>
-              <span className="text-xl font-black tracking-tight text-emerald-950 block leading-none">
-                SAVDO<span className="text-emerald-600">X</span>
-              </span>
-              <span className="text-[10px] font-semibold text-slate-500 tracking-wide hidden sm:block">
-                UZBEKISTAN MARKETPLACE
-              </span>
-            </div>
-          </Link>
 
           {/* All Categories Button */}
           <Link
             to="/catalog"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-sm border border-emerald-200 transition shrink-0"
+            className="hidden md:inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition shrink-0"
           >
             <LayoutGrid className="w-4 h-4 text-emerald-600" />
             <span>{t.categories}</span>
           </Link>
 
           {/* Smart Search Bar with Suggestions & History */}
-          <div className="relative flex-1 max-w-2xl">
+          <div className="relative flex-1 max-w-xl">
             <form onSubmit={handleSearchSubmit} className="relative flex items-center">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
               <input
@@ -205,7 +143,7 @@ export default function MainLayout() {
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full pl-10 pr-24 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-emerald-600 focus:outline-none text-sm text-slate-900 transition"
+                className="w-full pl-10 pr-24 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-emerald-600 focus:outline-none text-xs sm:text-sm text-slate-900 transition"
               />
               {searchInput && (
                 <button
@@ -218,9 +156,9 @@ export default function MainLayout() {
               )}
               <button
                 type="submit"
-                className="absolute right-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition"
+                className="absolute right-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition"
               >
-                Search
+                {t.searchBtn}
               </button>
             </form>
 
@@ -230,7 +168,7 @@ export default function MainLayout() {
                 {liveSuggestions.length > 0 ? (
                   <div className="space-y-1.5">
                     <div className="text-[11px] font-bold uppercase text-slate-400 px-2">
-                      Instant Product Matches
+                      {t.instantMatches}
                     </div>
                     {liveSuggestions.map((item) => (
                       <Link
@@ -241,7 +179,7 @@ export default function MainLayout() {
                         <div className="flex items-center gap-2.5 min-w-0">
                           <img
                             src={item.images?.[0]}
-                            alt={item.nameEn}
+                            alt={getLocalizedTitle(item, lang)}
                             className="w-9 h-9 rounded-lg object-cover shrink-0"
                           />
                           <div className="truncate">
@@ -260,7 +198,7 @@ export default function MainLayout() {
                 ) : (
                   <div>
                     <div className="text-[11px] font-bold uppercase text-slate-400 px-2 mb-1.5">
-                      Recent Searches & Popular
+                      {t.recentSearches}
                     </div>
                     <div className="flex flex-wrap gap-1.5 px-1">
                       {searchHistory.map((term) => (
@@ -286,36 +224,55 @@ export default function MainLayout() {
           {/* Glassmorphic AI Assistant Button */}
           <button
             type="button"
-            onClick={() => openAiWithPrompt('I have 2,500,000 UZS. I need a good smartphone.')}
-            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white text-xs font-extrabold shadow-md hover:shadow-emerald-glow transition shrink-0"
+            onClick={() => openAiWithPrompt(t.aiDefaultPrompt)}
+            className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white text-xs font-extrabold shadow-md hover:shadow-emerald-glow transition shrink-0"
           >
             <Sparkles className="w-4 h-4 text-emerald-200 animate-pulse" />
             <span className="hidden xl:inline">{t.aiAssistant}</span>
-            <span className="xl:hidden">AI Advisor</span>
+            <span className="xl:hidden">{t.aiShort}</span>
           </button>
 
-          {/* Action Icons: Orders, Favorites, Cart, Profile */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {/* Language Switcher: UZ | RU | EN */}
+          <div className="hidden sm:inline-flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200 shrink-0">
+            <Globe className="w-3.5 h-3.5 text-emerald-600 ml-1 mr-1" />
+            {['uz', 'ru', 'en'].map((code) => (
+              <button
+                key={code}
+                type="button"
+                onClick={() => setLang(code)}
+                className={`px-2 py-1 rounded-lg text-[11px] font-extrabold uppercase transition ${
+                  lang === code
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {code}
+              </button>
+            ))}
+          </div>
+
+          {/* Action Icons: Track, Favorites, Cart + Dedicated Login & Register Buttons */}
+          <div className="hidden lg:flex items-center gap-1.5 shrink-0">
             <NavLink
               to="/orders"
               className={({ isActive }) =>
-                `flex flex-col items-center px-2.5 py-1.5 rounded-xl text-xs font-semibold transition ${
+                `flex flex-col items-center px-2 py-1.5 rounded-xl text-xs font-semibold transition ${
                   isActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-emerald-700'
                 }`
               }
             >
-              <Truck className="w-5 h-5" />
-              <span className="text-[11px] mt-0.5">Track</span>
+              <Truck className="w-4 h-4" />
+              <span className="text-[10px] mt-0.5">{t.trackShort}</span>
             </NavLink>
 
             <NavLink
               to="/catalog?favorites=true"
-              className="relative flex flex-col items-center px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-emerald-700 transition"
+              className="relative flex flex-col items-center px-2 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-emerald-700 transition"
             >
-              <Heart className="w-5 h-5" />
-              <span className="text-[11px] mt-0.5">{t.favorites}</span>
+              <Heart className="w-4 h-4" />
+              <span className="text-[10px] mt-0.5">{t.favorites}</span>
               {favorites.length > 0 && (
-                <span className="absolute top-0.5 right-2 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute top-0.5 right-1.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">
                   {favorites.length}
                 </span>
               )}
@@ -324,54 +281,95 @@ export default function MainLayout() {
             <NavLink
               to="/cart"
               className={({ isActive }) =>
-                `relative flex flex-col items-center px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+                `relative flex flex-col items-center px-2.5 py-1.5 rounded-xl text-xs font-semibold transition ${
                   isActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-emerald-700'
                 }`
               }
             >
-              <ShoppingCart className="w-5 h-5" />
-              <span className="text-[11px] mt-0.5">{t.cart}</span>
+              <ShoppingCart className="w-4 h-4" />
+              <span className="text-[10px] mt-0.5">{t.cart}</span>
               {totalCartItems > 0 && (
-                <span className="absolute top-0.5 right-2 w-5 h-5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold flex items-center justify-center">
+                <span className="absolute top-0.5 right-1.5 w-4 h-4 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold flex items-center justify-center">
                   {totalCartItems}
                 </span>
               )}
             </NavLink>
 
+            {/* Login & Register Buttons */}
             <NavLink
-              to="/auth"
+              to="/login"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs font-bold transition ${
+                `inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition ${
                   isActive
                     ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                    : 'border-slate-200 hover:border-emerald-400 text-slate-800'
+                    : 'border-slate-200 hover:border-emerald-400 text-slate-800 bg-white'
                 }`
               }
             >
-              <User className="w-4 h-4 text-emerald-600" />
-              <span className="max-w-[90px] truncate">{user?.fullName?.split(' ')[0] || t.login}</span>
+              <LogIn className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{t.login}</span>
+            </NavLink>
+
+            <NavLink
+              to="/register"
+              className={({ isActive }) =>
+                `inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition shadow-sm ${
+                  isActive
+                    ? 'bg-emerald-800 text-white'
+                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                }`
+              }
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>{t.register}</span>
             </NavLink>
           </div>
         </div>
 
-        {/* Horizontal Category Bar */}
+        {/* Horizontal Category Bar + Quick Links */}
         <div className="border-t border-slate-100 bg-white">
-          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar text-xs font-semibold text-slate-600">
-            <Link
-              to="/catalog?flash=true"
-              className="px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-bold shrink-0 hover:bg-rose-100 transition"
-            >
-              ⚡ {t.flashSales}
-            </Link>
-            {categories.map((cat) => (
+          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4 overflow-x-auto no-scrollbar text-xs font-semibold text-slate-600">
+            <div className="flex items-center gap-1.5">
               <Link
-                key={cat.id}
-                to={`/catalog?category=${cat.slug}`}
-                className="px-3 py-1 rounded-full hover:bg-emerald-50 hover:text-emerald-800 whitespace-nowrap transition"
+                to="/catalog?flash=true"
+                className="px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-bold shrink-0 hover:bg-rose-100 transition"
               >
-                {getLocalizedTitle(cat, lang)}
+                ⚡ {t.flashSales}
               </Link>
-            ))}
+              {categories.slice(0, 10).map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/catalog?category=${cat.slug}`}
+                  className="px-2.5 py-1 rounded-full hover:bg-emerald-50 hover:text-emerald-800 whitespace-nowrap transition"
+                >
+                  {getLocalizedTitle(cat, lang)}
+                </Link>
+              ))}
+            </div>
+
+            <div className="hidden lg:flex items-center gap-3 shrink-0 border-l border-slate-200 pl-3">
+              <Link
+                to="/bonus"
+                className="inline-flex items-center gap-1 text-amber-700 hover:text-amber-800 font-bold"
+              >
+                <Gift className="w-3.5 h-3.5 text-amber-500" />
+                <span>{bonusWallet.pointsBalance.toLocaleString()} Bonus</span>
+              </Link>
+              <Link
+                to="/seller"
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-emerald-700 font-bold"
+              >
+                <Store className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{t.sellerHub}</span>
+              </Link>
+              <Link
+                to="/admin"
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-emerald-700 font-bold"
+              >
+                <ShieldAlert className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{t.adminPanel}</span>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -392,7 +390,7 @@ export default function MainLayout() {
       {/* AI Shopping Assistant Modal */}
       <AiShoppingAssistantModal />
 
-      {/* Mobile Bottom Navigation Bar (Home, Categories, Search, Cart, Profile) */}
+      {/* Mobile Bottom Navigation Bar */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg">
         <NavLink
           to="/"
@@ -404,7 +402,7 @@ export default function MainLayout() {
           }
         >
           <Home className="w-5 h-5" />
-          <span>Home</span>
+          <span>{t.home}</span>
         </NavLink>
         <NavLink
           to="/catalog"
@@ -419,11 +417,11 @@ export default function MainLayout() {
         </NavLink>
         <button
           type="button"
-          onClick={() => openAiWithPrompt('I have 2,500,000 UZS. I need a good smartphone.')}
+          onClick={() => openAiWithPrompt(t.aiDefaultPrompt)}
           className="flex flex-col items-center -mt-4 px-3 py-2 rounded-2xl bg-emerald-600 text-white text-[10px] font-extrabold shadow-md"
         >
           <Sparkles className="w-5 h-5" />
-          <span>AI Search</span>
+          <span>AI</span>
         </button>
         <NavLink
           to="/cart"
@@ -442,7 +440,7 @@ export default function MainLayout() {
           )}
         </NavLink>
         <NavLink
-          to="/auth"
+          to="/login"
           className={({ isActive }) =>
             `flex flex-col items-center py-1 px-3 rounded-xl text-[11px] font-bold ${
               isActive ? 'text-emerald-600' : 'text-slate-500'
@@ -450,7 +448,7 @@ export default function MainLayout() {
           }
         >
           <User className="w-5 h-5" />
-          <span>{t.profile}</span>
+          <span>{t.login}</span>
         </NavLink>
       </nav>
 
@@ -465,64 +463,56 @@ export default function MainLayout() {
               <span className="text-xl font-black text-white tracking-tight">SAVDOX</span>
             </div>
             <p className="text-sm text-emerald-200/80 max-w-sm leading-relaxed">
-              {t.tagline} Uzbekistan’s premier multi-vendor e-commerce ecosystem with 90-minute express delivery, AI budget concierge, and official IMEI-verified electronics.
+              {t.tagline} {t.heroDescription}
             </p>
             <div className="pt-2 flex flex-wrap gap-2">
-              {['Click Evolution', 'Payme Business', 'Uzum Bank 0%', 'Uzcard', 'Humo', 'Cash on Delivery'].map(
-                (badge) => (
-                  <span
-                    key={badge}
-                    className="px-2.5 py-1 rounded-lg bg-emerald-900/90 border border-emerald-800 text-[11px] font-semibold text-emerald-200"
-                  >
-                    {badge}
-                  </span>
-                )
-              )}
+              {['Click', 'Payme', 'Uzum Nasiya 0%', 'Uzcard', 'Humo'].map((badge) => (
+                <span
+                  key={badge}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-900/90 border border-emerald-800 text-[11px] font-semibold text-emerald-200"
+                >
+                  {badge}
+                </span>
+              ))}
             </div>
           </div>
 
           <div>
             <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 mb-3">
-              Marketplace
+              SAVDOX
             </h4>
             <ul className="space-y-2 text-xs text-emerald-200/90">
-              <li><Link to="/catalog" className="hover:text-white">All 16 Categories</Link></li>
-              <li><Link to="/catalog?flash=true" className="hover:text-white">Flash Sales</Link></li>
-              <li><Link to="/bonus" className="hover:text-white">SAVDOX Bonus Loyalty</Link></li>
-              <li><Link to="/orders" className="hover:text-white">Fast Delivery Tracking</Link></li>
+              <li><Link to="/catalog" className="hover:text-white">{t.allCategories}</Link></li>
+              <li><Link to="/catalog?flash=true" className="hover:text-white">{t.flashSales}</Link></li>
+              <li><Link to="/bonus" className="hover:text-white">{t.bonusProgram}</Link></li>
+              <li><Link to="/orders" className="hover:text-white">{t.orders}</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 mb-3">
-              For Partners
+              {t.profile}
             </h4>
             <ul className="space-y-2 text-xs text-emerald-200/90">
-              <li><Link to="/seller" className="hover:text-white">Seller Studio Dashboard</Link></li>
-              <li><Link to="/seller" className="hover:text-white">Open a Store on SAVDOX</Link></li>
-              <li><Link to="/admin" className="hover:text-white">Admin Console & RBAC</Link></li>
-              <li><Link to="/auth" className="hover:text-white">Merchant Verification</Link></li>
+              <li><Link to="/login" className="hover:text-white">{t.login}</Link></li>
+              <li><Link to="/register" className="hover:text-white">{t.register}</Link></li>
+              <li><Link to="/seller" className="hover:text-white">{t.sellerHub}</Link></li>
+              <li><Link to="/admin" className="hover:text-white">{t.adminPanel}</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 mb-3">
-              Uzbekistan Hubs
+              {cityName}
             </h4>
             <ul className="space-y-1.5 text-xs text-emerald-200/90">
-              <li>📍 Tashkent (Yunusabad & Chilanzar)</li>
-              <li>📍 Samarkand (Registan Logistics)</li>
-              <li>📍 Bukhara, Andijan, Fergana, Nukus</li>
-              <li className="pt-2 text-emerald-300 font-bold">24/7 Hotline: +998 71 200 77 00</li>
+              <li>📍 Toshkent, Samarqand, Buxoro</li>
+              <li>📍 Andijon, Fargʻona, Namangan, Nukus</li>
+              <li className="pt-2 text-emerald-300 font-bold">24/7: +998 71 200 77 00</li>
             </ul>
           </div>
-        </div>
-
-        <div className="border-t border-emerald-900/80 py-4 text-center text-xs text-emerald-300/70">
-          © 2026 SAVDOX Marketplace LLC (Tashkent, Uzbekistan). Built for Web, iOS & Android.
         </div>
       </footer>
     </div>
   );
 }
-

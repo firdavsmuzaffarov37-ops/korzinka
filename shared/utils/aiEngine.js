@@ -159,7 +159,7 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
     }
   }
 
-  // Generate structured, factual explanation
+  // Generate structured, factual explanation in UZ / RU / EN
   let summaryText = '';
   if (budgetUzs && withinBudget.length > 0) {
     const topPick = recommended[0];
@@ -168,15 +168,30 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
     const topPriceFormatted = formatUzs(topPick.priceUzs, lang);
     const savedFromBudget = formatUzs(budgetUzs - topPick.priceUzs, lang);
 
-    summaryText = `Based on your budget of **${budgetFormatted}**, I found **${withinBudget.length} verified marketplace products** in stock right now.
-
-• **Top Recommendation:** **${topTitle}** at **${topPriceFormatted}** from **${topPick.sellerName}** (Rating: ★ ${topPick.rating}, Stock: ${topPick.stock} units). This leaves you with **${savedFromBudget}** under your budget!
-• **Cheaper Alternative:** **${getLocalizedTitle(cheapestAlternative, lang)}** is available for **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% OFF old price of ${formatUzs(cheapestAlternative.oldPriceUzs, lang)}).`;
+    if (lang === 'uz') {
+      summaryText = `Siz koʻrsatgan **${budgetFormatted}** byudjet boʻyicha omborda mavjud **${withinBudget.length} ta tasdiqlangan mahsulot** topildi.\n\n• **Eng yaxshi tavsiya:** **${topTitle}** — **${topPriceFormatted}** (**${topPick.sellerName}**, Reyting: ★ ${topPick.rating}, Omborda: ${topPick.stock} dona). Byudjetingizdan **${savedFromBudget}** tejab qolasiz!\n• **Arzonroq muqobil variant:** **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% chegirma).`;
+    } else if (lang === 'ru') {
+      summaryText = `По вашему бюджету **${budgetFormatted}** найдено **${withinBudget.length} проверенных товаров** в наличии.\n\n• **Лучшая рекомендация:** **${topTitle}** за **${topPriceFormatted}** от **${topPick.sellerName}** (Рейтинг: ★ ${topPick.rating}, В наличии: ${topPick.stock} шт.). Экономия от бюджета: **${savedFromBudget}**!\n• **Более доступный вариант:** **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative.priceUzs, lang)}** (скидка ${cheapestAlternative.discountPercent}%).`;
+    } else {
+      summaryText = `Based on your budget of **${budgetFormatted}**, I found **${withinBudget.length} verified marketplace products** in stock right now.\n\n• **Top Recommendation:** **${topTitle}** at **${topPriceFormatted}** from **${topPick.sellerName}** (Rating: ★ ${topPick.rating}, Stock: ${topPick.stock} units). This leaves you with **${savedFromBudget}** under your budget!\n• **Cheaper Alternative:** **${getLocalizedTitle(cheapestAlternative, lang)}** is available for **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% OFF).`;
+    }
   } else if (budgetUzs && withinBudget.length === 0) {
-    summaryText = `Your requested budget is **${formatUzs(budgetUzs, lang)}**. Currently, the lowest-priced matching item in this category is **${getLocalizedTitle(cheapestAlternative, lang)}** at **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** from **${cheapestAlternative?.sellerName}**. Below are the closest verified options and multi-seller offers.`;
+    if (lang === 'uz') {
+      summaryText = `Siz soʻragan byudjet: **${formatUzs(budgetUzs, lang)}**. Ushbu toifadagi eng arzon mahsulot: **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** (**${cheapestAlternative?.sellerName}**). Quyida eng yaqin variantlar va sotuvchilar taqqoslovi keltirilgan.`;
+    } else if (lang === 'ru') {
+      summaryText = `Ваш бюджет: **${formatUzs(budgetUzs, lang)}**. Самый доступный товар в этой категории: **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** (**${cheapestAlternative?.sellerName}**). Ниже приведены ближайшие варианты.`;
+    } else {
+      summaryText = `Your requested budget is **${formatUzs(budgetUzs, lang)}**. Currently, the lowest-priced matching item in this category is **${getLocalizedTitle(cheapestAlternative, lang)}** at **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** from **${cheapestAlternative?.sellerName}**.`;
+    }
   } else {
     const topPick = recommended[0];
-    summaryText = `I searched the live SAVDOX catalog and compared verified sellers across Uzbekistan. Our highest-rated match is **${getLocalizedTitle(topPick, lang)}** at **${formatUzs(topPick?.priceUzs || 0, lang)}** by **${topPick?.sellerName}** (★ ${topPick?.rating}).`;
+    if (lang === 'uz') {
+      summaryText = `SAVDOX katalogi va tasdiqlangan sotuvchilar narxlari solishtirildi. Eng yuqori baholangan mos mahsulot: **${getLocalizedTitle(topPick, lang)}** — **${formatUzs(topPick?.priceUzs || 0, lang)}** (**${topPick?.sellerName}**, ★ ${topPick?.rating}).`;
+    } else if (lang === 'ru') {
+      summaryText = `Мы проверили каталог SAVDOX и сравнили цены продавцов. Лучшее совпадение: **${getLocalizedTitle(topPick, lang)}** за **${formatUzs(topPick?.priceUzs || 0, lang)}** от **${topPick?.sellerName}** (★ ${topPick?.rating}).`;
+    } else {
+      summaryText = `I searched the live SAVDOX catalog and compared verified sellers across Uzbekistan. Our highest-rated match is **${getLocalizedTitle(topPick, lang)}** at **${formatUzs(topPick?.priceUzs || 0, lang)}** by **${topPick?.sellerName}** (★ ${topPick?.rating}).`;
+    }
   }
 
   return {

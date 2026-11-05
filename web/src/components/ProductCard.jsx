@@ -95,7 +95,7 @@ export default function ProductCard({ product }) {
           {/* 0% Installment Pill */}
           <div className="mt-2">
             <span className="inline-block px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[11px] font-medium border border-emerald-100">
-              {formatUzs(monthlyUzs, lang)} / mo × 6
+              {monthlyUzs.toLocaleString('en-US')} {t.perMonth}
             </span>
           </div>
         </div>

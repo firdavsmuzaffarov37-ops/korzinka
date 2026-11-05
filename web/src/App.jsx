@@ -28,7 +28,9 @@ export default function App() {
             <Route path="seller" element={<SellerDashboardPage />} />
             <Route path="admin" element={<AdminDashboardPage />} />
             <Route path="bonus" element={<SavdoxBonusPage />} />
-            <Route path="auth" element={<AuthPage />} />
+            <Route path="login" element={<AuthPage defaultMode="login" />} />
+            <Route path="register" element={<AuthPage defaultMode="register" />} />
+            <Route path="auth" element={<AuthPage defaultMode="login" />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
@@ -36,4 +38,3 @@ export default function App() {
     </MarketplaceProvider>
   );
 }
-

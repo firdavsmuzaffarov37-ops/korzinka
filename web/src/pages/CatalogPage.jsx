@@ -3,16 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 import {
   Search,
   SlidersHorizontal,
-  Star,
-  Store,
   RotateCcw,
   Sparkles,
-  Check,
   Layers,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import ProductCard from '../components/ProductCard';
-import { formatUzs, getLocalizedTitle } from '@shared/utils/formatters';
+import { getLocalizedTitle } from '@shared/utils/formatters';
 
 export default function CatalogPage() {
   const {
@@ -20,10 +17,7 @@ export default function CatalogPage() {
     t,
     categories,
     products,
-    stores,
     favorites,
-    searchHistory,
-    setSearchHistory,
     openAiWithPrompt,
   } = useMarketplace();
 
@@ -45,7 +39,7 @@ export default function CatalogPage() {
   const [minRating, setMinRating] = useState(0);
   const [onlyFlash, setOnlyFlash] = useState(initialFlash);
   const [onlyFavorites, setOnlyFavorites] = useState(initialFavs);
-  const [sortBy, setSortBy] = useState('popular'); // 'popular' | 'price_asc' | 'price_desc' | 'newest' | 'rating'
+  const [sortBy, setSortBy] = useState('popular');
 
   useEffect(() => {
     setSelectedCategory(searchParams.get('category') || 'all');
@@ -141,7 +135,7 @@ export default function CatalogPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      {/* Category Header Banner if a category is active */}
+      {/* Category Header Banner */}
       {activeCategoryObj ? (
         <div className="rounded-3xl bg-white border border-slate-200 p-6 shadow-soft flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
@@ -156,10 +150,9 @@ export default function CatalogPage() {
                   {getLocalizedTitle(activeCategoryObj, lang)}
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-                  {activeCategoryObj.productCount.toLocaleString()} Catalog Products
+                  {activeCategoryObj.productCount.toLocaleString()} {t.itemsCount}
                 </span>
               </div>
-              {/* Subcategories Pills */}
               <div className="flex flex-wrap gap-1.5 mt-2.5">
                 <button
                   type="button"
@@ -170,7 +163,7 @@ export default function CatalogPage() {
                       : 'bg-slate-100 text-slate-700 hover:bg-emerald-50'
                   }`}
                 >
-                  All Subcategories
+                  {t.allSubcategories}
                 </button>
                 {activeCategoryObj.subcategories.map((sub) => (
                   <button
@@ -190,11 +183,10 @@ export default function CatalogPage() {
             </div>
           </div>
 
-          {/* Category Specific Filter Attributes */}
           <div className="bg-emerald-50/70 rounded-2xl p-3.5 border border-emerald-100 max-w-xs w-full">
             <div className="text-[11px] font-bold uppercase text-emerald-900 mb-1.5 flex items-center gap-1">
               <Layers className="w-3.5 h-3.5 text-emerald-600" />
-              Category Filter Facets
+              {t.categoryFacets}
             </div>
             <div className="flex flex-wrap gap-1">
               {activeCategoryObj.filterOptions.map((opt) => (
@@ -209,14 +201,13 @@ export default function CatalogPage() {
           </div>
         </div>
       ) : (
-        /* All 16 Categories Horizontal Selector */
         <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-soft">
           <div className="flex items-center justify-between mb-3">
             <h1 className="text-xl font-black text-slate-900">
-              All 16 Marketplace Categories
+              {t.categoriesCountTitle}
             </h1>
             <span className="text-xs font-semibold text-slate-500">
-              Click any department to explore subcategories & filters
+              {t.categoriesSubtitle}
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
@@ -229,7 +220,7 @@ export default function CatalogPage() {
               >
                 <img
                   src={cat.image}
-                  alt={cat.nameEn}
+                  alt={getLocalizedTitle(cat, lang)}
                   className="w-9 h-9 rounded-lg object-cover shrink-0"
                 />
                 <div className="min-w-0">
@@ -248,7 +239,6 @@ export default function CatalogPage() {
 
       {/* Main Content Layout: Left Filter Sidebar + Right Product Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Sidebar: Smart Filters */}
         <aside className="lg:col-span-3 rounded-3xl bg-white border border-slate-200 p-5 shadow-soft space-y-5">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
@@ -264,10 +254,9 @@ export default function CatalogPage() {
             </button>
           </div>
 
-          {/* 1. Product Name Search */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Keyword / Model Search
+              {t.keywordSearch}
             </label>
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
@@ -281,10 +270,9 @@ export default function CatalogPage() {
             </div>
           </div>
 
-          {/* 2. Category Dropdown */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Department ({categories.length})
+              {t.department} ({categories.length})
             </label>
             <select
               value={selectedCategory}
@@ -294,7 +282,7 @@ export default function CatalogPage() {
               }}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white"
             >
-              <option value="all">All 16 Categories</option>
+              <option value="all">{t.allCategories}</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.slug}>
                   {getLocalizedTitle(c, lang)} ({c.productCount})
@@ -303,22 +291,21 @@ export default function CatalogPage() {
             </select>
           </div>
 
-          {/* 3. Price Range in UZS */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Price Range (UZS)
+              {t.priceRange}
             </label>
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="number"
-                placeholder="Min UZS"
+                placeholder="Min"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
                 className="w-full px-2.5 py-2 rounded-xl border border-slate-200 text-xs"
               />
               <input
                 type="number"
-                placeholder="Max UZS"
+                placeholder="Max"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
                 className="w-full px-2.5 py-2 rounded-xl border border-slate-200 text-xs"
@@ -326,9 +313,9 @@ export default function CatalogPage() {
             </div>
             <div className="flex flex-wrap gap-1.5 mt-2">
               {[
-                { label: '≤ 500k UZS', max: 500000 },
-                { label: '≤ 2.5M UZS', max: 2500000 },
-                { label: '≤ 7M UZS', max: 7000000 },
+                { label: '≤ 500 000', max: 500000 },
+                { label: '≤ 2 500 000', max: 2500000 },
+                { label: '≤ 7 000 000', max: 7000000 },
               ].map((chip) => (
                 <button
                   key={chip.label}
@@ -345,15 +332,14 @@ export default function CatalogPage() {
             </div>
           </div>
 
-          {/* 4. Brand Filtering */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5">Brand</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t.brandLabel}</label>
             <select
               value={selectedBrand}
               onChange={(e) => setSelectedBrand(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white"
             >
-              <option value="all">All Brands ({allBrands.length})</option>
+              <option value="all">{t.allBrands} ({allBrands.length})</option>
               {allBrands.map((brand) => (
                 <option key={brand} value={brand}>
                   {brand}
@@ -362,17 +348,16 @@ export default function CatalogPage() {
             </select>
           </div>
 
-          {/* 5. Seller Filtering */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Verified Store / Seller
+              {t.sellerLabel}
             </label>
             <select
               value={selectedSeller}
               onChange={(e) => setSelectedSeller(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white"
             >
-              <option value="all">All Verified Stores</option>
+              <option value="all">{t.allSellers}</option>
               {allSellers.map((seller) => (
                 <option key={seller} value={seller}>
                   {seller}
@@ -381,10 +366,9 @@ export default function CatalogPage() {
             </select>
           </div>
 
-          {/* 6. Rating Filtering */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Minimum Rating
+              {t.minRating}
             </label>
             <div className="flex gap-1.5">
               {[0, 4.5, 4.8, 4.9].map((r) => (
@@ -398,13 +382,12 @@ export default function CatalogPage() {
                       : 'bg-slate-50 text-slate-700 border-slate-200'
                   }`}
                 >
-                  {r === 0 ? 'Any' : `★ ${r}+`}
+                  {r === 0 ? t.anyRating : `★ ${r}+`}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* 7. Quick Checkboxes */}
           <div className="space-y-2 pt-1 border-t border-slate-100">
             <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
               <input
@@ -413,7 +396,7 @@ export default function CatalogPage() {
                 onChange={(e) => setOnlyFlash(e.target.checked)}
                 className="rounded text-emerald-600 focus:ring-emerald-500"
               />
-              <span>⚡ Flash Sale Items Only</span>
+              <span>⚡ {t.onlyFlashSales}</span>
             </label>
             <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
               <input
@@ -422,49 +405,45 @@ export default function CatalogPage() {
                 onChange={(e) => setOnlyFavorites(e.target.checked)}
                 className="rounded text-emerald-600 focus:ring-emerald-500"
               />
-              <span>❤️ Saved Favorites Only</span>
+              <span>❤️ {t.onlyFavorites}</span>
             </label>
           </div>
         </aside>
 
         {/* Right Column: Sort Bar + Product Grid */}
         <div className="lg:col-span-9 space-y-5">
-          {/* Top Sort & AI Prompt Bar */}
           <div className="rounded-2xl bg-white border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-3 shadow-soft">
             <div className="text-xs font-semibold text-slate-600">
-              Showing <strong className="text-slate-900">{filteredProducts.length}</strong> verified marketplace items
+              {t.showingItems} <strong className="text-slate-900">{filteredProducts.length}</strong>
             </div>
 
             <div className="flex items-center gap-3 flex-wrap">
               <button
                 type="button"
-                onClick={() =>
-                  openAiWithPrompt('I have 2,500,000 UZS. I need a good smartphone.')
-                }
+                onClick={() => openAiWithPrompt(t.aiDefaultPrompt)}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 transition"
               >
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                Ask AI Budget Advisor
+                {t.aiAssistant}
               </button>
 
               <div className="flex items-center gap-1.5 text-xs">
-                <span className="text-slate-500 font-semibold">Sort by:</span>
+                <span className="text-slate-500 font-semibold">{t.sortBy}</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 bg-white focus:outline-none"
                 >
-                  <option value="popular">Popularity (Best Selling)</option>
-                  <option value="price_asc">Price: Low to High (UZS)</option>
-                  <option value="price_desc">Price: High to Low (UZS)</option>
-                  <option value="rating">Highest Customer Rating</option>
-                  <option value="newest">Newest Arrivals</option>
+                  <option value="popular">{t.sortPopular}</option>
+                  <option value="price_asc">{t.sortPriceAsc}</option>
+                  <option value="price_desc">{t.sortPriceDesc}</option>
+                  <option value="rating">{t.sortRating}</option>
+                  <option value="newest">{t.sortNewest}</option>
                 </select>
               </div>
             </div>
           </div>
 
-          {/* Product Cards Grid */}
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {filteredProducts.map((product) => (
@@ -477,17 +456,17 @@ export default function CatalogPage() {
                 <Search className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-extrabold text-slate-900">
-                No matching products found
+                {t.noProductsFound}
               </h3>
               <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Try broadening your UZS price filter or clearing active brand/category filters.
+                {t.noProductsSub}
               </p>
               <button
                 type="button"
                 onClick={handleResetFilters}
                 className="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-sm"
               >
-                Reset All Filters
+                {t.clearFilters}
               </button>
             </div>
           )}
@@ -496,4 +475,3 @@ export default function CatalogPage() {
     </div>
   );
 }
-
