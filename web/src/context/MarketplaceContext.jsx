@@ -334,7 +334,18 @@ export function MarketplaceProvider({ children }) {
     setFavorites((prev) => {
       const exists = prev.includes(productId);
       const next = exists ? prev.filter((id) => id !== productId) : [productId, ...prev];
-      showToast(exists ? 'Removed from Favorites' : 'Saved to Favorites ❤️');
+      const toastMsg = exists
+        ? lang === 'uz'
+          ? 'Saralanganlardan oʻchirildi'
+          : lang === 'ru'
+          ? 'Удалено из избранного'
+          : 'Removed from Favorites'
+        : lang === 'uz'
+        ? 'Saralanganlarga saqlandi ❤️'
+        : lang === 'ru'
+        ? 'Добавлено в избранное ❤️'
+        : 'Saved to Favorites ❤️';
+      showToast(toastMsg);
       return next;
     });
   };
@@ -376,7 +387,15 @@ export function MarketplaceProvider({ children }) {
         },
       ];
     });
-    showToast(`Added "${product.nameEn.slice(0, 32)}..." to Cart`);
+
+    const prodTitle = getLocalizedTitle(product, lang);
+    const toastMsg =
+      lang === 'uz'
+        ? `"${prodTitle.slice(0, 24)}..." savatga qoʻshildi! 🛒`
+        : lang === 'ru'
+        ? `"${prodTitle.slice(0, 24)}..." добавлен в корзину! 🛒`
+        : `Added "${prodTitle.slice(0, 24)}..." to Cart! 🛒`;
+    showToast(toastMsg);
   };
 
   const updateCartItemQuantity = (cartItemId, newQuantity) => {
@@ -405,7 +424,14 @@ export function MarketplaceProvider({ children }) {
 
   const removeFromCart = (cartItemId) => {
     setCart((prev) => prev.filter((item) => item.id !== cartItemId));
-    showToast('Item removed from cart', 'info');
+    showToast(
+      lang === 'uz'
+        ? 'Mahsulot savatdan olib tashlandi'
+        : lang === 'ru'
+        ? 'Товар удален из корзины'
+        : 'Item removed from cart',
+      'info'
+    );
   };
 
   const clearCart = () => {
