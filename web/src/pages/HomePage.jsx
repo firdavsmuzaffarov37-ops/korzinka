@@ -10,7 +10,6 @@ import {
   CreditCard,
   Copy,
   Check,
-  Camera,
   Star,
   Clock,
   Tag,
@@ -168,22 +167,13 @@ export default function HomePage() {
                 onChange={(e) => setAiHeroQuery(e.target.value)}
                 className="w-full p-3 rounded-2xl border-2 border-emerald-500/40 focus:border-emerald-600 bg-white text-xs font-semibold text-slate-900 focus:outline-none resize-none"
               />
-              <div className="flex gap-2">
+              <div>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold inline-flex items-center justify-center gap-1.5 shadow-md transition"
+                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold inline-flex items-center justify-center gap-1.5 shadow-md transition"
                 >
                   <Sparkles className="w-4 h-4" />
                   {t.aiFindBestBtn}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openAiWithPrompt('')}
-                  title={t.visualSearch}
-                  className="px-3.5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold inline-flex items-center gap-1"
-                >
-                  <Camera className="w-4 h-4 text-emerald-600" />
-                  <span>{t.aiPhotoBtn}</span>
                 </button>
               </div>
             </form>

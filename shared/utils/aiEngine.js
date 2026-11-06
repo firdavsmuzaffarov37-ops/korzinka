@@ -1,32 +1,100 @@
 /**
- * SAVDOX Grounded AI Shopping Assistant & Visual Search Engine
+ * SAVDOX Grounded AI Shopping Assistant Engine
  * Strictly queries live marketplace catalog records. Never hallucinates prices, discounts, stock, or sellers.
  */
 
 import { formatUzs, getLocalizedTitle } from './formatters.js';
 
-const CATEGORY_KEYWORDS = {
-  smartphones: ['smartphone', 'phone', 'telefon', 'smartfon', 'телефон', 'смартфон', 'iphone', 'samsung', 'xiaomi', 'redmi', 'honor', 'imei', 'mobile'],
-  computers: ['laptop', 'computer', 'macbook', 'notebook', 'noutbuk', 'kompyuter', 'ноутбук', 'компьютер', 'pc'],
-  electronics: ['tv', 'television', 'televizor', 'телевизор', 'qled', 'electronics', 'audio', 'elektronika'],
-  clothing: ['clothing', 'jacket', 'chapan', 'chopon', 'shirt', 'kiyim', 'одежда', 'чапан', 'fashion', 'silk', 'adras'],
-  shoes: ['shoes', 'sneakers', 'krossovka', 'poyabzal', 'обувь', 'кроссовки', 'nike', 'running'],
-  beauty: ['beauty', 'dyson', 'hair', 'cosmetics', 'perfume', 'styler', 'goʻzallik', 'красота', 'стайлер'],
-  groceries: ['grocery', 'groceries', 'food', 'nuts', 'fruit', 'oziq-ovqat', 'продукты', 'орехи', 'сухофрукты', 'gift', 'samarqand'],
-  'home-furniture': ['chair', 'furniture', 'sofa', 'office', 'mebel', 'kreslo', 'мебель', 'кресло', 'дом'],
-  kitchen: ['kitchen', 'coffee', 'espresso', 'delonghi', 'oshxona', 'qahva', 'кухня', 'кофемашина'],
-  sports: ['sport', 'gym', 'dumbbell', 'fitness', 'gantel', 'спорт', 'гантели'],
-  toys: ['toy', 'robot', 'kids', 'stem', 'lego', 'oʻyinchoq', 'игрушки', 'робот'],
-  books: ['book', 'novel', 'reading', 'kitob', 'qodiriy', 'книга', 'книги'],
-  automotive: ['car', 'radar', 'dashcam', 'avto', 'videoregistrator', 'antiradar', 'авто', 'радар', 'видеорегистратор', 'cobalt'],
-  health: ['health', 'blood pressure', 'omron', 'tonometr', 'medical', 'salomatlik', 'здоровье', 'тонометр'],
-  'baby-products': ['baby', 'stroller', 'cybex', 'aravacha', 'bolalar', 'коляска', 'детские'],
-  accessories: ['watch', 'smartwatch', 'soat', 'apple watch', 'часы', 'аксессуары', 'accessories'],
+export const CATEGORY_KEYWORDS = {
+  smartphones: [
+    'smartphone', 'smartfon', 'smartfonlar', 'smartfoni', 'phone', 'telefon', 'telefonlar', 'telefoni', 'tel', 'sotka',
+    'телефон', 'телефоны', 'смартфон', 'смартфоны', 'сотка', 'сотовые', 'iphone', 'ayfon', 'айфон', 'samsung', 'xiaomi', 'redmi', 'honor', 'imei', 'mobile'
+  ],
+  computers: [
+    'laptop', 'computer', 'kompyuter', 'kompuyuter', 'komputer', 'komplar', 'komp', 'kompyuteri', 'kompuyuteri',
+    'noutbuk', 'noutbuklar', 'nout', 'pk', 'ноутбук', 'ноутбуки', 'ноут', 'компьютер', 'компьютеры', 'комп', 'пк', 'macbook', 'pc', 'monoblok', 'моноблок'
+  ],
+  electronics: [
+    'tv', 'television', 'televizor', 'televizorlar', 'телевизор', 'телевизоры', 'qled', 'oled', 'smart tv',
+    'audio', 'dinamik', 'колонка', 'колонкалар', 'elektronika', 'electronics', 'электроника'
+  ],
+  clothing: [
+    'clothing', 'jacket', 'chapan', 'chopon', 'choponlar', 'shirt', 'kiyim', 'kiyimlar', 'libos', 'kastyum', 'kurtka',
+    'hudi', 'hoodie', 'одежда', 'чапан', 'куртка', 'худи', 'рубашка', 'костюм', 'fashion', 'silk', 'adras'
+  ],
+  shoes: [
+    'shoes', 'sneakers', 'krossovka', 'krossovkalar', 'poyabzal', 'oyoq kiyim', 'tufli',
+    'обувь', 'кроссовки', 'туфли', 'nike', 'adidas', 'running'
+  ],
+  beauty: [
+    'beauty', 'dyson', 'hair', 'cosmetics', 'perfume', 'styler', 'goʻzallik', 'gozallik', 'kosmetika',
+    'atir', 'fen', 'soch', 'красота', 'стайлер', 'духи', 'косметика'
+  ],
+  groceries: [
+    'grocery', 'groceries', 'food', 'nuts', 'fruit', 'oziq-ovqat', 'oziq ovqat', 'mahsulotlar',
+    'yongʻoq', 'yongoq', 'mayiz', 'shirinlik', 'meva', 'choy', 'shaxona', 'samarqand', 'gift',
+    'продукты', 'орехи', 'сухофрукты', 'сладости'
+  ],
+  'home-furniture': [
+    'chair', 'furniture', 'sofa', 'office', 'mebel', 'kreslo', 'stol', 'stul', 'divan', 'shkaf',
+    'мебель', 'кресло', 'стол', 'стул', 'диван', 'дом'
+  ],
+  kitchen: [
+    'kitchen', 'coffee', 'espresso', 'delonghi', 'oshxona', 'qahva', 'kofe', 'kofemashina', 'choynak',
+    'tova', 'qozon', 'airfryer', 'кухня', 'кофемашина', 'кофеварка', 'аэрогриль'
+  ],
+  sports: [
+    'sport', 'gym', 'dumbbell', 'fitness', 'gantel', 'trenajor',
+    'спорт', 'гантели', 'тренажер', 'фитнес'
+  ],
+  toys: [
+    'toy', 'robot', 'kids', 'stem', 'lego', 'oʻyinchoq', 'oyinchoq', 'konstruktor', 'bolalar uchun',
+    'игрушки', 'робот', 'конструктор'
+  ],
+  books: [
+    'book', 'novel', 'reading', 'kitob', 'kitoblar', 'qodiriy', 'adabiyot', 'roman', 'darslik', 'badiiy',
+    'книга', 'книги', 'роман'
+  ],
+  automotive: [
+    'car', 'radar', 'dashcam', 'avto', 'videoregistrator', 'antiradar', 'mashina', 'moshina', 'avtomobil',
+    'dashcam', 'car', 'авто', 'радар', 'видеорегистратор', 'машина', 'cobalt', 'gentra'
+  ],
+  health: [
+    'health', 'blood pressure', 'omron', 'tonometr', 'medical', 'salomatlik', 'bosim', 'dori', 'davleniya',
+    'аптечка', 'здоровье', 'тонометр', 'давление'
+  ],
+  'baby-products': [
+    'baby', 'stroller', 'cybex', 'aravacha', 'bolalar aravachasi', 'kolyaska', 'bolalar',
+    'коляска', 'детские', 'для детей', 'pampers'
+  ],
+  accessories: [
+    'watch', 'smartwatch', 'soat', 'aqlli soat', 'apple watch', 'часы', 'смарт часы', 'аксессуары',
+    'accessories', 'kamar', 'sumka', 'ryukzak', 'hamyon'
+  ],
 };
+
+const STOP_WORDS = new Set([
+  'menda', 'menga', 'bizga', 'sizga', 'unga', 'ularga',
+  'bor', 'bormi', 'kerak', 'kerakli', 'uchun', 'yaxshi', 'ajoyib', 'zoʻr', "zo'r", 'zor',
+  'qanday', 'qaysi', 'qanaqa', 'eng', 'juda', 'yangi', 'arzon', 'arzonroq', 'qimmat',
+  'narx', 'narxi', 'narxida', 'pul', 'pulim', 'puli', 'summa', 'summasi',
+  'som', "so'm", 'soʻm', 'sum', 'ming', 'million', 'mln', 'uzs',
+  'topib', 'ber', 'bering', 'tavsiya', 'tavsiyangiz', 'qiling', 'iltimos',
+  'sotib', 'olish', 'olmoqchiman', 'olmoqchi', 'qidiryapman', 'koʻrsat', "ko'rsat", 'korsat',
+  'toshkent', 'fargona', "farg'ona", 'samarqand', 'buxoro', 'andijon',
+  'мне', 'меня', 'нам', 'вам', 'ему', 'ей',
+  'есть', 'нужен', 'нужна', 'нужно', 'нужны', 'хороший', 'хорошая', 'хорошие',
+  'для', 'цена', 'цены', 'сум', 'сомов', 'тысяч', 'тыс', 'миллион', 'млн',
+  'недорогой', 'дешевый', 'посоветуй', 'посоветуйте', 'подскажи', 'подскажите',
+  'какой', 'какая', 'какие', 'лучше', 'лучший', 'пожалуйста', 'купить', 'хочу',
+  'i', 'me', 'my', 'we', 'have', 'need', 'want', 'looking', 'good', 'best', 'great',
+  'for', 'under', 'budget', 'uzs', 'uzbekistan', 'please', 'recommend', 'show', 'find',
+  'around', 'cheap', 'affordable', 'buy', 'purchase'
+]);
 
 /**
  * Extracts budget in UZS from natural language user prompt
- * Handles "2,500,000 UZS", "2 500 000 so'm", "2.5 million", "2.5m", etc.
+ * Handles "2,500,000 UZS", "2 500 000 so'm", "2.5 million", "2.5m", "3500000som", etc.
  */
 export function extractBudgetUzs(text) {
   if (!text) return null;
@@ -73,7 +141,11 @@ export function detectCategoriesFromPrompt(text) {
   const matched = [];
 
   for (const [slug, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    if (keywords.some((kw) => lower.includes(kw))) {
+    if (keywords.some((kw) => {
+      // Match whole word or clean boundary where possible
+      const regex = new RegExp(`(^|[^a-zа-яёўқғҳ])${kw}([^a-zа-яёўқғҳ]|$)`, 'i');
+      return regex.test(lower) || lower.includes(kw);
+    })) {
       matched.push(slug);
     }
   }
@@ -92,24 +164,30 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
     lowerPrompt.includes('list') ||
     lowerPrompt.includes('bundle') ||
     lowerPrompt.includes('roʻyxat') ||
+    lowerPrompt.includes('ro\'yxat') ||
     lowerPrompt.includes('toʻplam') ||
+    lowerPrompt.includes('to\'plam') ||
     lowerPrompt.includes('список') ||
     lowerPrompt.includes('набор');
 
   // Filter active approved products
   let candidates = products.filter((p) => p.approvalStatus !== 'rejected');
 
+  // STRICT CATEGORY FILTERING:
+  // If the user mentions computers, phones, or any specific category,
+  // candidates MUST strictly be restricted to that category!
   if (matchedCategories.length > 0) {
     const catFiltered = candidates.filter((p) => matchedCategories.includes(p.categorySlug));
     if (catFiltered.length > 0) {
       candidates = catFiltered;
     }
   } else {
-    // Keyword search fallback
+    // Keyword search fallback with STOP_WORDS filtering
     const tokens = lowerPrompt
       .replace(/[^\w\sа-яёўқғҳ]/gi, ' ')
       .split(/\s+/)
-      .filter((w) => w.length > 2 && !['have', 'need', 'good', 'want', 'uzs', 'uchun', 'kerak', 'yaxshi', 'мне', 'нужен', 'хороший'].includes(w));
+      .map((w) => w.trim())
+      .filter((w) => w.length > 2 && !STOP_WORDS.has(w) && !/^\d+$/.test(w));
 
     if (tokens.length > 0) {
       const tokenMatches = candidates.filter((p) => {
@@ -126,25 +204,29 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
   let recommended = [];
   let withinBudget = [];
 
-  if (budgetUzs) {
+  if (budgetUzs && candidates.length > 0) {
     // Sort by smallest distance to the requested budget (closest price appears first)
     const sortedByBudgetCloseness = [...candidates].sort((a, b) => {
       const diffA = Math.abs(a.priceUzs - budgetUzs);
       const diffB = Math.abs(b.priceUzs - budgetUzs);
-      if (Math.abs(diffA - diffB) < budgetUzs * 0.08) {
+      if (Math.abs(diffA - diffB) < budgetUzs * 0.12) {
+        // Prefer items within/under budget if distance is comparable
+        const underA = a.priceUzs <= budgetUzs ? 0 : 1;
+        const underB = b.priceUzs <= budgetUzs ? 0 : 1;
+        if (underA !== underB) return underA - underB;
         return b.rating - a.rating;
       }
       return diffA - diffB;
     });
 
-    withinBudget = sortedByBudgetCloseness.filter((p) => p.priceUzs <= budgetUzs * 1.05);
+    withinBudget = sortedByBudgetCloseness.filter((p) => p.priceUzs <= budgetUzs * 1.15);
     recommended = withinBudget.length > 0 ? withinBudget.slice(0, 4) : sortedByBudgetCloseness.slice(0, 4);
-  } else {
+  } else if (candidates.length > 0) {
     withinBudget = [...candidates];
     recommended = [...candidates].sort((a, b) => b.rating - a.rating).slice(0, 4);
   }
 
-  // Find cheapest alternative in the same category
+  // Find cheapest alternative in the matching candidates
   const cheapestAlternative = [...candidates].sort((a, b) => a.priceUzs - b.priceUzs)[0] || null;
 
   // Build seller price comparison table from real sellerOffers
@@ -178,6 +260,7 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
         product: item,
         priceUzs: item.priceUzs,
         sellerName: item.sellerName,
+        quantity: 1,
       });
       runningTotal += item.priceUzs;
     }
@@ -193,31 +276,49 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
     const priceDiff = budgetUzs - topPick.priceUzs;
 
     if (lang === 'uz') {
-      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.1
+      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.05
         ? `Byudjetingizga deyarli 100% aniq toʻgʻri keladi!`
         : priceDiff > 0
         ? `Byudjetingizdan ${formatUzs(priceDiff, lang)} tejab qolasiz!`
         : `Byudjetdan bor-yoʻgʻi ${formatUzs(Math.abs(priceDiff), lang)} yuqori`;
 
-      summaryText = `Siz kiritgan **${budgetFormatted}** summasiga eng mos keluvchi tasdiqlangan mahsulotlar tanlandi:\n\n• **Eng mos tavsiya:** **${topTitle}** — **${topPriceFormatted}** (${matchComment}, **${topPick.sellerName}**, Reyting: ★ ${topPick.rating})\n• **Arzonroq muqobil variant:** **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% chegirma).`;
+      const alternativeText = cheapestAlternative && cheapestAlternative.id !== topPick.id
+        ? `\n• **Arzonroq muqobil variant:** **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% chegirma).`
+        : '';
+
+      summaryText = `Siz koʻrsatgan **${budgetFormatted}** summasiga eng mos keluvchi ${candidates.length} ta tasdiqlangan mahsulot topildi:\n\n• **Eng mos tavsiya:** **${topTitle}** — **${topPriceFormatted}** (${matchComment}, sotuvchi **${topPick.sellerName}**, Reyting: ★ ${topPick.rating})${alternativeText}`;
     } else if (lang === 'ru') {
-      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.1
+      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.05
         ? `практически 100% совпадение с бюджетом!`
         : priceDiff > 0
         ? `экономия от бюджета ${formatUzs(priceDiff, lang)}`
         : `всего на ${formatUzs(Math.abs(priceDiff), lang)} выше бюджета`;
 
-      summaryText = `По вашему запросу на **${budgetFormatted}** подобраны товары максимально близкие к указанной сумме:\n\n• **Лучшее совпадение:** **${topTitle}** за **${topPriceFormatted}** (${matchComment}, продавец **${topPick.sellerName}**, Рейтинг: ★ ${topPick.rating})\n• **Более доступный вариант:** **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative.priceUzs, lang)}** (скидка ${cheapestAlternative.discountPercent}%).`;
+      const alternativeText = cheapestAlternative && cheapestAlternative.id !== topPick.id
+        ? `\n• **Более доступный вариант:** **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative.priceUzs, lang)}** (скидка ${cheapestAlternative.discountPercent}%).`
+        : '';
+
+      summaryText = `По вашему запросу на **${budgetFormatted}** подобрано ${candidates.length} проверенных товаров:\n\n• **Лучшее совпадение:** **${topTitle}** за **${topPriceFormatted}** (${matchComment}, продавец **${topPick.sellerName}**, Рейтинг: ★ ${topPick.rating})${alternativeText}`;
     } else {
-      summaryText = `Based on your budget of **${budgetFormatted}**, I matched products closest to this exact price point:\n\n• **Closest Match:** **${topTitle}** at **${topPriceFormatted}** (**${topPick.sellerName}**, Rating: ★ ${topPick.rating})\n• **Cheaper Alternative:** **${getLocalizedTitle(cheapestAlternative, lang)}** is available for **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% OFF).`;
+      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.05
+        ? `almost 100% exact match for your budget!`
+        : priceDiff > 0
+        ? `saves ${formatUzs(priceDiff, lang)} from your budget!`
+        : `only ${formatUzs(Math.abs(priceDiff), lang)} above budget`;
+
+      const alternativeText = cheapestAlternative && cheapestAlternative.id !== topPick.id
+        ? `\n• **Cheaper Alternative:** **${getLocalizedTitle(cheapestAlternative, lang)}** is available for **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% OFF).`
+        : '';
+
+      summaryText = `Based on your budget of **${budgetFormatted}**, found ${candidates.length} verified products closest to this exact price point:\n\n• **Closest Match:** **${topTitle}** at **${topPriceFormatted}** (${matchComment}, **${topPick.sellerName}**, Rating: ★ ${topPick.rating})${alternativeText}`;
     }
-  } else if (budgetUzs && withinBudget.length === 0) {
+  } else if (budgetUzs && candidates.length > 0) {
     if (lang === 'uz') {
-      summaryText = `Siz soʻragan byudjet: **${formatUzs(budgetUzs, lang)}**. Ushbu toifadagi eng arzon mahsulot: **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** (**${cheapestAlternative?.sellerName}**). Quyida eng yaqin variantlar va sotuvchilar taqqoslovi keltirilgan.`;
+      summaryText = `Siz soʻragan byudjet: **${formatUzs(budgetUzs, lang)}**. Ushbu toifadagi eng arzon mahsulot: **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** (**${cheapestAlternative?.sellerName}**).`;
     } else if (lang === 'ru') {
-      summaryText = `Ваш бюджет: **${formatUzs(budgetUzs, lang)}**. Самый доступный товар в этой категории: **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** (**${cheapestAlternative?.sellerName}**). Ниже приведены ближайшие варианты.`;
+      summaryText = `Ваш бюджет: **${formatUzs(budgetUzs, lang)}**. Самый доступный товар в этой категории: **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** (**${cheapestAlternative?.sellerName}**).`;
     } else {
-      summaryText = `Your requested budget is **${formatUzs(budgetUzs, lang)}**. Currently, the lowest-priced matching item in this category is **${getLocalizedTitle(cheapestAlternative, lang)}** at **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** from **${cheapestAlternative?.sellerName}**.`;
+      summaryText = `Your requested budget is **${formatUzs(budgetUzs, lang)}**. Currently, the lowest-priced matching item is **${getLocalizedTitle(cheapestAlternative, lang)}** at **${formatUzs(cheapestAlternative?.priceUzs || 0, lang)}** from **${cheapestAlternative?.sellerName}**.`;
     }
   } else {
     const topPick = recommended[0];
@@ -248,8 +349,7 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
 }
 
 /**
- * Visual Product Search Matcher
- * Matches uploaded image metadata / visual tags / color profile against real marketplace products
+ * Visual Product Search Matcher (legacy helper maintained for compatibility)
  */
 export function runVisualProductSearch({ fileName = '', visualCategory = '', products = [] }) {
   const cleanName = fileName.toLowerCase();
@@ -272,7 +372,6 @@ export function runVisualProductSearch({ fileName = '', visualCategory = '', pro
       score += 30;
     }
 
-    // Fallback visual similarity score based on category or popularity
     score += product.rating * 4;
 
     return {
@@ -284,4 +383,3 @@ export function runVisualProductSearch({ fileName = '', visualCategory = '', pro
   scored.sort((a, b) => b.similarityPercent - a.similarityPercent);
   return scored.slice(0, 4);
 }
-
