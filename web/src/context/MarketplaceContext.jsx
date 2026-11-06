@@ -867,6 +867,23 @@ export function MarketplaceProvider({ children }) {
     showToast('Complaint marked as resolved');
   };
 
+  const logout = () => {
+    setUser(null);
+    try {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(null));
+    } catch {}
+    if (supabase) {
+      supabase.auth.signOut().catch(() => {});
+    }
+    showToast(
+      lang === 'uz'
+        ? 'Hisobdan chiqildi'
+        : lang === 'ru'
+        ? 'Вы вышли из системы'
+        : 'Signed out'
+    );
+  };
+
   const openAiWithPrompt = (promptText = '') => {
     setAiInitialPrompt(promptText);
     setIsAiAssistantOpen(true);
@@ -893,6 +910,7 @@ export function MarketplaceProvider({ children }) {
     setSelectedCity,
     user,
     setUser,
+    logout,
     isSupabaseConfigured,
     supabase,
     supabaseStatus,

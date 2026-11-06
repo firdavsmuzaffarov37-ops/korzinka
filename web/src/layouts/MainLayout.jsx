@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   LogIn,
   UserPlus,
+  LogOut,
   X,
   ArrowLeftRight,
   Download,
@@ -36,6 +37,7 @@ export default function MainLayout() {
     selectedCity,
     setSelectedCity,
     user,
+    logout,
     categories,
     products,
     cart,
@@ -49,6 +51,12 @@ export default function MainLayout() {
   } = useMarketplace();
 
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/register');
+  };
+
   const [searchInput, setSearchInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -264,6 +272,17 @@ export default function MainLayout() {
               </div>
 
               <NotificationDropdown lang={lang} />
+
+              {user && (
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  title={t.logout}
+                  className="p-1 rounded-lg text-rose-600 hover:bg-rose-50 border border-rose-200 transition shrink-0"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -282,27 +301,27 @@ export default function MainLayout() {
         </div>
 
         {/* DESKTOP / TABLET VIEW (>= md) */}
-        <div className="hidden md:flex max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3.5 items-center justify-between gap-2 lg:gap-3 w-full">
+        <div className="hidden md:flex max-w-[1536px] mx-auto px-2 sm:px-4 py-2 sm:py-2.5 items-center justify-between gap-1.5 lg:gap-2.5 w-full">
           {/* SAVDOX Brand Logo & City Selector */}
-          <div className="flex items-center gap-2 lg:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 lg:gap-2.5 shrink-0">
             <Link to="/" className="flex items-center gap-2 group">
               <img
                 src="/savdox-icon.png"
                 alt="SAVDOX Icon"
-                className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl object-contain shadow-sm group-hover:scale-105 transition shrink-0"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl object-contain shadow-sm group-hover:scale-105 transition shrink-0"
               />
               <div>
                 <span className="text-lg sm:text-xl font-black tracking-tight text-emerald-950 block leading-none">
                   SAVDO<span className="text-emerald-600">X</span>
                 </span>
-                <span className="text-[10px] font-semibold text-slate-500 tracking-wide hidden md:block">
+                <span className="text-[10px] font-semibold text-slate-500 tracking-wide hidden lg:block">
                   {t.brandSubtitle}
                 </span>
               </div>
             </Link>
 
-            {/* Clean City Dropdown - Visible on Ultra-wide Desktop */}
-            <div className="hidden 2xl:flex items-center gap-1 bg-slate-100 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs shrink-0">
+            {/* Clean City Dropdown - Visible on xl and up */}
+            <div className="hidden xl:flex items-center gap-1 bg-slate-100 px-2 py-1.5 rounded-xl border border-slate-200 text-xs shrink-0">
               <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <select
                 aria-label={t.deliverTo}
@@ -311,7 +330,7 @@ export default function MainLayout() {
                   const found = UZBEKISTAN_CITIES.find((c) => c.id === e.target.value);
                   if (found) setSelectedCity(found);
                 }}
-                className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer max-w-[110px] truncate"
+                className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer max-w-[100px] truncate"
               >
                 {UZBEKISTAN_CITIES.map((city) => (
                   <option key={city.id} value={city.id}>
@@ -322,10 +341,10 @@ export default function MainLayout() {
             </div>
           </div>
 
-          {/* All Categories Button - Visible on Ultra-wide Desktop */}
+          {/* All Categories Button - Visible on xl and up */}
           <Link
             to="/catalog"
-            className="hidden 2xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition shrink-0"
+            className="hidden xl:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition shrink-0"
           >
             <LayoutGrid className="w-4 h-4 text-emerald-600" />
             <span>{t.categories}</span>
@@ -338,9 +357,9 @@ export default function MainLayout() {
           <button
             type="button"
             onClick={() => openAiWithPrompt(t.aiDefaultPrompt)}
-            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white text-xs font-extrabold shadow-md hover:shadow-emerald-glow transition shrink-0"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white text-xs font-extrabold shadow-sm transition shrink-0"
           >
-            <Sparkles className="w-4 h-4 text-emerald-200 animate-pulse" />
+            <Sparkles className="w-3.5 h-3.5 text-emerald-200 animate-pulse" />
             <span className="hidden 2xl:inline">{t.aiAssistant}</span>
             <span className="2xl:hidden font-extrabold">AI</span>
           </button>
@@ -368,7 +387,7 @@ export default function MainLayout() {
             type="button"
             onClick={handleInstallApp}
             title={lang === 'uz' ? "SAVDOX ilovasini o'rnatish" : lang === 'ru' ? "Установить приложение SAVDOX" : "Install SAVDOX App"}
-            className="hidden 2xl:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 text-xs font-bold border border-slate-200 transition shrink-0"
+            className="hidden 2xl:inline-flex items-center gap-1 px-2 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 text-xs font-bold border border-slate-200 transition shrink-0"
           >
             <Download className="w-3.5 h-3.5 text-emerald-600" />
             <span>
@@ -385,7 +404,7 @@ export default function MainLayout() {
               to="/orders"
               title={t.trackShort}
               className={({ isActive }) =>
-                `flex flex-col items-center px-2 py-1.5 rounded-xl text-xs font-semibold transition ${
+                `flex flex-col items-center px-1.5 py-1 rounded-xl text-xs font-semibold transition ${
                   isActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-emerald-700'
                 }`
               }
@@ -399,7 +418,7 @@ export default function MainLayout() {
               to="/compare"
               title={lang === 'uz' ? 'Taqqos' : lang === 'ru' ? 'Сравнить' : 'Compare'}
               className={({ isActive }) =>
-                `relative flex flex-col items-center px-2 py-1.5 rounded-xl text-xs font-semibold transition ${
+                `relative flex flex-col items-center px-1.5 py-1 rounded-xl text-xs font-semibold transition ${
                   isActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-emerald-700'
                 }`
               }
@@ -418,7 +437,7 @@ export default function MainLayout() {
             <NavLink
               to="/catalog?favorites=true"
               title={t.favorites}
-              className="relative flex flex-col items-center px-2 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-emerald-700 transition"
+              className="relative flex flex-col items-center px-1.5 py-1 rounded-xl text-xs font-semibold text-slate-600 hover:text-emerald-700 transition"
             >
               <Heart className="w-4 h-4" />
               <span className="text-[10px] mt-0.5 hidden 2xl:inline">{t.favorites}</span>
@@ -433,7 +452,7 @@ export default function MainLayout() {
               to="/cart"
               title={t.cart}
               className={({ isActive }) =>
-                `relative flex flex-col items-center px-2.5 py-1.5 rounded-xl text-xs font-semibold transition ${
+                `relative flex flex-col items-center px-2 py-1 rounded-xl text-xs font-semibold transition ${
                   isActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-emerald-700'
                 }`
               }
@@ -447,42 +466,77 @@ export default function MainLayout() {
               )}
             </NavLink>
 
-            {/* Login & Register Buttons */}
-            <NavLink
-              to="/login"
-              title={t.login}
-              className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition shadow-xs ${
-                  isActive
-                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                    : 'border-slate-200 hover:border-emerald-400 text-slate-800 bg-white'
-                }`
-              }
-            >
-              <LogIn className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{t.login}</span>
-            </NavLink>
+            {/* Auth / Profile & Chiqish (Logout) Section */}
+            {user ? (
+              <div className="flex items-center gap-1.5 pl-1 shrink-0">
+                <Link
+                  to="/orders"
+                  title={user.fullName || t.profile}
+                  className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-800 text-xs font-bold transition border border-slate-200 shrink-0"
+                >
+                  {user.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.fullName}
+                      className="w-4 h-4 rounded-full object-cover shrink-0"
+                    />
+                  ) : (
+                    <User className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  )}
+                  <span className="max-w-[70px] truncate">
+                    {user.fullName ? user.fullName.split(' ')[0] : t.profile}
+                  </span>
+                </Link>
 
-            <NavLink
-              to="/register"
-              title={t.register}
-              className={({ isActive }) =>
-                `hidden 2xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm ${
-                  isActive
-                    ? 'bg-emerald-800 text-white'
-                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                }`
-              }
-            >
-              <UserPlus className="w-3.5 h-3.5" />
-              <span>{t.register}</span>
-            </NavLink>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  title={t.logout}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-800 text-xs font-bold transition shadow-xs shrink-0 cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                  <span>{t.logout}</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 pl-1 shrink-0">
+                <NavLink
+                  to="/login"
+                  title={t.login}
+                  className={({ isActive }) =>
+                    `inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition shadow-xs shrink-0 ${
+                      isActive
+                        ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
+                        : 'border-slate-200 hover:border-emerald-400 text-slate-800 bg-white'
+                    }`
+                  }
+                >
+                  <LogIn className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{t.login}</span>
+                </NavLink>
+
+                <NavLink
+                  to="/register"
+                  title={t.register}
+                  className={({ isActive }) =>
+                    `inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition shadow-sm shrink-0 ${
+                      isActive
+                        ? 'bg-emerald-800 text-white'
+                        : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    }`
+                  }
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>{t.register}</span>
+                </NavLink>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Horizontal Category Bar + Quick Links */}
         <div className="border-t border-slate-100 bg-white w-full overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4 overflow-x-auto no-scrollbar text-xs font-semibold text-slate-600 w-full">
+          <div className="max-w-[1536px] mx-auto px-4 py-2 flex items-center justify-between gap-4 overflow-x-auto no-scrollbar text-xs font-semibold text-slate-600 w-full">
             <div className="flex items-center gap-1.5">
               <Link
                 to="/catalog?flash=true"
@@ -618,17 +672,29 @@ export default function MainLayout() {
             </span>
           )}
         </NavLink>
-        <NavLink
-          to="/login"
-          className={({ isActive }) =>
-            `flex flex-col items-center py-1 px-3 rounded-xl text-[11px] font-bold ${
-              isActive ? 'text-emerald-600' : 'text-slate-500'
-            }`
-          }
-        >
-          <User className="w-5 h-5" />
-          <span>{t.login}</span>
-        </NavLink>
+        {user ? (
+          <button
+            type="button"
+            onClick={handleLogout}
+            title={t.logout}
+            className="flex flex-col items-center py-1 px-3 rounded-xl text-[11px] font-bold text-rose-600 hover:text-rose-700"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>{t.logout}</span>
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `flex flex-col items-center py-1 px-3 rounded-xl text-[11px] font-bold ${
+                isActive ? 'text-emerald-600' : 'text-slate-500'
+              }`
+            }
+          >
+            <User className="w-5 h-5" />
+            <span>{t.login}</span>
+          </NavLink>
+        )}
       </nav>
 
       {/* Footer */}
@@ -675,8 +741,26 @@ export default function MainLayout() {
               {t.profile}
             </h4>
             <ul className="space-y-2 text-xs text-emerald-200/90">
-              <li><Link to="/login" className="hover:text-white">{t.login}</Link></li>
-              <li><Link to="/register" className="hover:text-white">{t.register}</Link></li>
+              {user ? (
+                <>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="text-rose-300 hover:text-white flex items-center gap-1.5 font-bold cursor-pointer"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>{t.logout}</span>
+                    </button>
+                  </li>
+                  <li><Link to="/orders" className="hover:text-white">{t.orders}</Link></li>
+                </>
+              ) : (
+                <>
+                  <li><Link to="/login" className="hover:text-white">{t.login}</Link></li>
+                  <li><Link to="/register" className="hover:text-white">{t.register}</Link></li>
+                </>
+              )}
               <li><Link to="/seller" className="hover:text-white">{t.sellerHub}</Link></li>
               <li><Link to="/admin" className="hover:text-white">{t.adminPanel}</Link></li>
             </ul>
