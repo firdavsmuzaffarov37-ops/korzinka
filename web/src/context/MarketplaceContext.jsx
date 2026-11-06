@@ -823,6 +823,19 @@ export function MarketplaceProvider({ children }) {
     setIsAiAssistantOpen(true);
   };
 
+  // Live dynamic category counts strictly synchronized with actual catalog products
+  const categoriesWithLiveCounts = useMemo(() => {
+    return categories.map((cat) => {
+      const actualCount = products.filter(
+        (p) => p.categorySlug === cat.slug && p.approvalStatus !== 'rejected'
+      ).length;
+      return {
+        ...cat,
+        productCount: actualCount,
+      };
+    });
+  }, [categories, products]);
+
   const value = {
     lang,
     setLang,
@@ -834,7 +847,8 @@ export function MarketplaceProvider({ children }) {
     isSupabaseConfigured,
     supabase,
     supabaseStatus,
-    categories,
+    categories: categoriesWithLiveCounts,
+    rawCategories: categories,
     addCategory,
     products,
     addProduct,

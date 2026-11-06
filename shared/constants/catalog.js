@@ -3,6 +3,8 @@
  * Used as real seed data & offline fallback when Supabase env vars are not configured.
  */
 
+import { EXPANDED_PRODUCTS } from './catalogExpansion.js';
+
 export const FEATURED_STORES = [
   {
     id: 'store-texnomart-pro',
@@ -1812,6 +1814,7 @@ export const INITIAL_PRODUCTS = [
     isRecommended: true,
     approvalStatus: 'approved',
   },
+  ...EXPANDED_PRODUCTS,
 ];
 
 export const ACTIVE_COUPONS = [
