@@ -1087,53 +1087,6 @@ export const INITIAL_PRODUCTS = [
     approvalStatus: 'approved',
   },
 
-  // AUTOMOTIVE
-  {
-    id: 'prod-neoline-radar-dashcam',
-    slug: 'neoline-x-cop-9100s-4k-dashcam-and-uzbekistan-gps-radar-detector',
-    sku: 'SVX-AUT-001',
-    categoryId: 'cat-automotive',
-    categorySlug: 'automotive',
-    subcategory: 'Dashcams & Radar Detectors',
-    storeId: 'store-malika-mobile',
-    sellerName: 'Malika Smart Hub',
-    sellerRating: 4.88,
-    brand: 'Neoline',
-    nameUz: 'Videoregistrator va Antiradar Neoline X-COP (Oʻzbekiston GPS bazasi bilan)',
-    nameRu: 'Гибрид Видеорегистратор + Радар-детектор Neoline X-COP (База камер Узбекистана)',
-    nameEn: 'Neoline X-COP Dual lens Dashcam & Smart GPS Radar Detector (Uzbekistan Database)',
-    descriptionUz: 'Lochin, Hikvision va AvtoCon radarlarini uzoqdan aniqlovchi maxsus EXD Plus moduli hamda Sony Starvis tungi tasvir sensori. Chevrolet Cobalt, Gentra, Tracker uchun mos.',
-    descriptionRu: 'Флагманский гибрид с базой всех камер и радаров Узбекистана (Lochin, Hikvision, перекрестки), матрицей Sony Starvis и управлением жестами.',
-    descriptionEn: 'Pre-loaded with the latest Uzbekistan traffic camera & Lochin radar GPS database. Sony Starvis night vision sensor, Wi-Fi smartphone sync, and magnetic mount.',
-    priceUzs: 2150000,
-    oldPriceUzs: 2590000,
-    discountPercent: 17,
-    rating: 4.95,
-    reviewCount: 284,
-    soldCount: 1120,
-    stock: 30,
-    images: [
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80',
-    ],
-    colors: [{ name: 'Stealth Matte Black', hex: '#18181B' }],
-    sizes: ['Standard + 64GB MicroSD Gift'],
-    specifications: {
-      Sensor: 'Sony Starvis IMX307 Full HD HDR Night Vision',
-      Database: 'Weekly Updated Uzbekistan GPS Radar & Camera Base',
-      Connectivity: 'Wi-Fi App Sync for iOS & Android',
-      Compatibility: '12V/24V — Ideal for Chevrolet Cobalt, Onix, Tracker, BYD',
-    },
-    sellerOffers: [
-      { storeId: 'store-malika-mobile', sellerName: 'Malika Smart Hub', priceUzs: 2150000, deliveryEta: '90 mins Express', rating: 4.88, warranty: '2 Years Official Service' },
-    ],
-    visualTags: ['car', 'automotive', 'camera', 'electronics'],
-    isFlashSale: true,
-    isPopular: true,
-    isBestSeller: true,
-    isRecommended: true,
-    approvalStatus: 'approved',
-  },
-
   // HEALTH
   {
     id: 'prod-omron-m3-comfort',

@@ -98,14 +98,23 @@ export function MarketplaceProvider({ children }) {
   const [user, setUser] = useState(() => loadFromStorage(STORAGE_KEYS.USER, DEFAULT_USER));
   const [categories, setCategories] = useState(() => {
     const cached = loadFromStorage(STORAGE_KEYS.CATEGORIES, null);
-    if (!cached || !cached[0]?.subcategoriesUz) {
+    if (
+      !cached ||
+      cached.length !== INITIAL_CATEGORIES.length ||
+      cached.some((c) => c.slug === 'automotive') ||
+      !cached[0]?.subcategoriesUz
+    ) {
       return INITIAL_CATEGORIES;
     }
     return cached;
   });
   const [products, setProducts] = useState(() => {
     const cached = loadFromStorage(STORAGE_KEYS.PRODUCTS, null);
-    if (!cached || cached.length < INITIAL_PRODUCTS.length) {
+    if (
+      !cached ||
+      cached.some((p) => p.categoryId === 'cat-automotive' || p.categorySlug === 'automotive') ||
+      cached.length !== INITIAL_PRODUCTS.length
+    ) {
       return INITIAL_PRODUCTS;
     }
     return cached;

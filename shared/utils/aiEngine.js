@@ -55,10 +55,6 @@ export const CATEGORY_KEYWORDS = {
     'book', 'novel', 'reading', 'kitob', 'kitoblar', 'qodiriy', 'adabiyot', 'roman', 'darslik', 'badiiy',
     'книга', 'книги', 'роман'
   ],
-  automotive: [
-    'car', 'radar', 'dashcam', 'avto', 'videoregistrator', 'antiradar', 'mashina', 'moshina', 'avtomobil',
-    'dashcam', 'car', 'авто', 'радар', 'видеорегистратор', 'машина', 'cobalt', 'gentra'
-  ],
   health: [
     'health', 'blood pressure', 'omron', 'tonometr', 'medical', 'salomatlik', 'bosim', 'dori', 'davleniya',
     'аптечка', 'здоровье', 'тонометр', 'давление'
