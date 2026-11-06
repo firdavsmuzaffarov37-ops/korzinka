@@ -131,7 +131,7 @@ export default function ProductDetailsPage() {
       </div>
 
       {/* Main Product Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-soft">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 lg:p-8 shadow-soft">
         {/* 1. Product Image Gallery (5 Cols) */}
         <div className="lg:col-span-5 space-y-3">
           <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-50 border border-slate-100">
@@ -267,20 +267,20 @@ export default function ProductDetailsPage() {
             )}
 
             {/* Quantity & Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3">
               <div className="inline-flex items-center rounded-2xl border border-slate-300 bg-white">
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-3.5 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-100 rounded-l-2xl"
+                  className="px-3 sm:px-3.5 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-100 rounded-l-2xl"
                 >
                   −
                 </button>
-                <span className="px-4 text-sm font-bold">{quantity}</span>
+                <span className="px-3 sm:px-4 text-sm font-bold">{quantity}</span>
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="px-3.5 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-100 rounded-r-2xl"
+                  className="px-3 sm:px-3.5 py-2.5 text-sm font-black text-slate-700 hover:bg-slate-100 rounded-r-2xl"
                 >
                   +
                 </button>
@@ -291,7 +291,7 @@ export default function ProductDetailsPage() {
                 onClick={() =>
                   addToCart(product, { selectedColor, selectedSize, quantity })
                 }
-                className="flex-1 min-w-[180px] py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold inline-flex items-center justify-center gap-2 shadow-md transition"
+                className="flex-1 min-w-[130px] py-3.5 px-4 sm:px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-extrabold inline-flex items-center justify-center gap-2 shadow-md transition"
               >
                 <ShoppingCart className="w-4 h-4" />
                 <span>{t.addToCart}</span>
@@ -303,7 +303,7 @@ export default function ProductDetailsPage() {
                   addToCart(product, { selectedColor, selectedSize, quantity });
                   navigate('/checkout');
                 }}
-                className="py-3.5 px-6 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-white text-sm font-extrabold transition"
+                className="w-full sm:w-auto py-3.5 px-6 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-white text-xs sm:text-sm font-extrabold transition text-center"
               >
                 {t.buyNow}
               </button>

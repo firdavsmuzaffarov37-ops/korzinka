@@ -83,34 +83,34 @@ export default function HomePage() {
       {/* 1. PROMOTIONAL HERO BANNER + GLASSMORPHIC AI SHOPPING ASSISTANT */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         {/* Main Promotional Hero Card */}
-        <div className="lg:col-span-7 relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 text-white p-7 sm:p-10 flex flex-col justify-between shadow-xl">
-          <div className="relative z-10 space-y-4 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-400/20 border border-emerald-400/30 text-emerald-200 text-xs font-bold">
+        <div className="lg:col-span-7 relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 text-white p-5 sm:p-8 lg:p-10 flex flex-col justify-between shadow-xl">
+          <div className="relative z-10 space-y-3 sm:space-y-4 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-emerald-400/20 border border-emerald-400/30 text-emerald-200 text-[11px] sm:text-xs font-bold">
               <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
               <span>
                 {t.heroExpressBadge} {cityName}
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12]">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.15]">
               SAVDO<span className="text-emerald-400">X</span> — {t.tagline}
             </h1>
 
-            <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed">
+            <p className="text-xs sm:text-sm lg:text-base text-emerald-100/90 leading-relaxed">
               {t.heroDescription}
             </p>
 
-            <div className="pt-2 flex flex-wrap gap-3">
+            <div className="pt-1 sm:pt-2 flex flex-wrap gap-2.5 sm:gap-3">
               <Link
                 to="/catalog"
-                className="px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm inline-flex items-center gap-2 shadow-lg transition"
+                className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm inline-flex items-center gap-2 shadow-lg transition"
               >
                 <span>{t.heroExploreBtn}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/catalog?category=smartphones"
-                className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition"
+                className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 transition"
               >
                 {t.heroPhonesBtn}
               </Link>
@@ -118,7 +118,7 @@ export default function HomePage() {
           </div>
 
           {/* Trust Micro-Bar */}
-          <div className="relative z-10 mt-8 pt-5 border-t border-white/15 grid grid-cols-3 gap-3 text-xs text-emerald-100">
+          <div className="relative z-10 mt-6 sm:mt-8 pt-4 sm:pt-5 border-t border-white/15 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs text-emerald-100">
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{t.trustExpress}</span>
@@ -222,14 +222,14 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3">
           {categories.map((cat) => (
             <motion.div key={cat.id} whileHover={{ y: -3 }}>
               <Link
                 to={`/catalog?category=${cat.slug}`}
-                className="group flex flex-col items-center text-center p-3 rounded-2xl bg-white border border-slate-100 hover:border-emerald-300 shadow-soft transition h-full"
+                className="group flex flex-col items-center text-center p-2 sm:p-3 rounded-2xl bg-white border border-slate-100 hover:border-emerald-300 shadow-soft transition h-full"
               >
-                <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 mb-2.5 border border-slate-200/60">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 mb-1.5 sm:mb-2.5 border border-slate-200/60">
                   <img
                     src={cat.image}
                     alt={getLocalizedTitle(cat, lang)}
@@ -237,10 +237,10 @@ export default function HomePage() {
                     className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
                   />
                 </div>
-                <span className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 line-clamp-1">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-900 group-hover:text-emerald-700 line-clamp-1">
                   {getLocalizedTitle(cat, lang)}
                 </span>
-                <span className="text-[10px] text-slate-400 font-medium mt-0.5">
+                <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium mt-0.5">
                   {cat.productCount.toLocaleString()} {t.itemsCount}
                 </span>
               </Link>
