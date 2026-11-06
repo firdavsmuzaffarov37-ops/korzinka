@@ -201,3 +201,4 @@ export default function OfficialTaxReceiptModal({ isOpen, onClose, order, lang =
     </AnimatePresence>
   );
 }
+
