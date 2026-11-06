@@ -79,7 +79,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-10 sm:space-y-12 overflow-x-hidden">
       {/* 1. PROMOTIONAL HERO BANNER + GLASSMORPHIC AI SHOPPING ASSISTANT */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         {/* Main Promotional Hero Card */}
