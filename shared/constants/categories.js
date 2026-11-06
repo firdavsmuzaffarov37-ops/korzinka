@@ -1,6 +1,6 @@
 /**
  * SAVDOX 16 Official Marketplace Categories
- * Each category includes localized titles (UZ/RU/EN), high-res imagery, subcategories, product counts, and custom filter facets.
+ * Each category includes localized titles (UZ/RU/EN), high-res imagery, localized subcategories, product counts, and custom filter facets.
  */
 
 export const CATEGORIES = [
@@ -14,7 +14,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&w=800&q=80',
     productCount: 7,
     subcategories: ['Smart TVs', 'Audio & Headphones', 'Cameras & Drones', 'Smart Home', 'Projectors'],
+    subcategoriesUz: ['Smart televizorlar', 'Audio va quloqchinlar', 'Kameralar va dronlar', 'Aqlli uy tizimlari', 'Proyektorlar'],
+    subcategoriesRu: ['Смарт ТВ', 'Аудио и наушники', 'Камеры и дроны', 'Умный дом', 'Проекторы'],
     filterOptions: ['Brand', 'Screen Size', 'Warranty', 'Smart Features', 'Power Rating'],
+    filterOptionsUz: ['Brend', 'Ekran diagonali', 'Kafolat muddati', 'Smart funksiyalar', 'Quvvati'],
+    filterOptionsRu: ['Бренд', 'Диагональ экрана', 'Гарантия', 'Смарт функции', 'Мощность'],
   },
   {
     id: 'cat-smartphones',
@@ -26,7 +30,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80',
     productCount: 9,
     subcategories: ['Flagship Phones', 'Budget Smartphones', '5G Phones', 'Foldables', 'IMEI Registered'],
+    subcategoriesUz: ['Flagman smartfonlar', 'Hamyonbop smartfonlar', '5G smartfonlar', 'Buklanadigan telefonlar', 'Rasmiy IMEI'],
+    subcategoriesRu: ['Флагманы', 'Бюджетные смартфоны', '5G смартфоны', 'Складные телефоны', 'Официальный IMEI'],
     filterOptions: ['Storage (128GB-1TB)', 'RAM (6GB-16GB)', 'Battery mAh', '5G Support', 'Official IMEI'],
+    filterOptionsUz: ['Doimiy xotira (128GB-1TB)', 'Tezkor xotira (6GB-16GB)', 'Batareya quvvati', '5G aloqa', 'Rasmiy IMEI'],
+    filterOptionsRu: ['Память (128ГБ-1ТБ)', 'ОЗУ (6ГБ-16ГБ)', 'Емкость батареи', 'Поддержка 5G', 'Официальный IMEI'],
   },
   {
     id: 'cat-computers',
@@ -38,7 +46,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80',
     productCount: 4,
     subcategories: ['Ultrabooks', 'Gaming Laptops', 'Desktops & All-in-One', 'Monitors', 'PC Components'],
+    subcategoriesUz: ['Ultrabuklar', 'Oʻyin noutbuklari', 'Monoblok va shaxsiy kompyuterlar', 'Monitorlar', 'Kompyuter qismlari'],
+    subcategoriesRu: ['Ультрабуки', 'Игровые ноутбуки', 'Моноблоки и ПК', 'Мониторы', 'Комплектующие ПК'],
     filterOptions: ['Processor (M3/Intel/Ryzen)', 'RAM', 'SSD Storage', 'Graphics Card', 'Display Hz'],
+    filterOptionsUz: ['Protsessor (M3/Intel/Ryzen)', 'RAM', 'SSD xotira', 'Videokarta', 'Ekran chastotasi'],
+    filterOptionsRu: ['Процессор (M3/Intel/Ryzen)', 'ОЗУ', 'SSD накопитель', 'Видеокарта', 'Частота экрана'],
   },
   {
     id: 'cat-clothing',
@@ -50,7 +62,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=800&q=80',
     productCount: 10,
     subcategories: ['Men’s Apparel', 'Women’s Fashion', 'Traditional Atlas & Adras', 'Outerwear', 'Activewear'],
+    subcategoriesUz: ['Erkaklar kiyimlari', 'Ayollar kiyimlari', 'Milliy atlas va adras', 'Ustki kiyimlar', 'Sport liboslari'],
+    subcategoriesRu: ['Мужская одежда', 'Женская одежда', 'Традиционный атлас и адрас', 'Верхняя одежда', 'Спортивная одежда'],
     filterOptions: ['Size (XS-XXL)', 'Material (100% Cotton/Silk)', 'Season', 'Color', 'Gender'],
+    filterOptionsUz: ['Oʻlcham (XS-XXL)', 'Material (100% Paxta/Ipak)', 'Mavsum', 'Rang', 'Jinsi'],
+    filterOptionsRu: ['Размер (XS-XXL)', 'Материал (Хлопок/Шелк)', 'Сезон', 'Цвет', 'Пол'],
   },
   {
     id: 'cat-shoes',
@@ -62,7 +78,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
     productCount: 12,
     subcategories: ['Running Sneakers', 'Classic Leather Shoes', 'Women’s Heels & Flats', 'Winter Boots', 'Kids Footwear'],
+    subcategoriesUz: ['Krossovkalar', 'Klassik charm tufli', 'Ayollar poyabzallari', 'Qishki etiklar', 'Bolalar poyabzali'],
+    subcategoriesRu: ['Кроссовки', 'Классическая кожаная обувь', 'Женская обувь', 'Зимние ботинки', 'Детская обувь'],
     filterOptions: ['EU Size (36-46)', 'Upper Material', 'Sole Type', 'Season', 'Brand'],
+    filterOptionsUz: ['Oʻlcham (36-46)', 'Material', 'Taglik turi', 'Mavsum', 'Brend'],
+    filterOptionsRu: ['Размер (36-46)', 'Материал', 'Тип подошвы', 'Сезон', 'Бренд'],
   },
   {
     id: 'cat-beauty',
@@ -74,7 +94,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80',
     productCount: 4,
     subcategories: ['K-Beauty Skincare', 'Luxury Perfumes', 'Makeup', 'Hair Styling Tools', 'Organic Care'],
+    subcategoriesUz: ['Koreys kosmetikasi', 'Lyuks parfyumeriya', 'Makiyaj', 'Soch turmaklash asboblari', 'Organik parvarish'],
+    subcategoriesRu: ['Корейская косметика', 'Люкс парфюмерия', 'Макияж', 'Стайлеры и фены', 'Органический уход'],
     filterOptions: ['Skin Type', 'Origin (Korea/France)', 'SPF Protection', 'Cruelty-Free', 'Volume ml'],
+    filterOptionsUz: ['Teri turi', 'Ishlab chiqaruvchi (Koreya/Fransiya)', 'SPF himoya', 'Hajmi ml'],
+    filterOptionsRu: ['Тип кожи', 'Страна (Корея/Франция)', 'SPF защита', 'Объем мл'],
   },
   {
     id: 'cat-groceries',
@@ -86,7 +110,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80',
     productCount: 4,
     subcategories: ['Samarkand Dried Fruits & Nuts', 'Fresh Produce', 'Beverages & Tea', 'Halal Meat & Dairy', 'Pantry Staples'],
+    subcategoriesUz: ['Samarqand quritilgan mevalari', 'Yangi meva-sabzavotlar', 'Ichimliklar va choy', 'Halol goʻsht va sut', 'Asosiy oziq-ovqatlar'],
+    subcategoriesRu: ['Самаркандские сухофрукты и орехи', 'Свежие фрукты и овощи', 'Напитки и чай', 'Халяль мясо и молочка', 'Бакалея'],
     filterOptions: ['Halal Certified', 'Organic', 'Local Uzbekistan Farm', 'Express 90m Eligible', 'Dietary'],
+    filterOptionsUz: ['Halol sertifikatlangan', 'Organik', 'Mahalliy dehqonchilik', '90 daqiqada yetkazish'],
+    filterOptionsRu: ['Халяль сертификат', 'Органик', 'Местные фермы', 'Доставка за 90 мин'],
   },
   {
     id: 'cat-home-furniture',
@@ -98,7 +126,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['Living Room Sofas', 'Ergonomic Office Chairs', 'Bukhara Carpets & Rugs', 'Bedroom Sets', 'Lighting'],
+    subcategoriesUz: ['Mehmonxona divanlari', 'Ortopedik ofis kreslolari', 'Buxoro gilamlari', 'Yotoqxona toʻplamlari', 'Yoritgichlar'],
+    subcategoriesRu: ['Диваны для гостиной', 'Ортопедические офисные кресла', 'Бухарские ковры', 'Спальные гарнитуры', 'Освещение'],
     filterOptions: ['Room Type', 'Dimensions', 'Frame Material', 'Assembly Included', 'Style'],
+    filterOptionsUz: ['Xona turi', 'Oʻlchamlari', 'Karkas materiali', 'Yigʻib berish xizmati'],
+    filterOptionsRu: ['Тип комнаты', 'Размеры', 'Материал каркаса', 'Сборка в комплекте'],
   },
   {
     id: 'cat-kitchen',
@@ -110,7 +142,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
     productCount: 4,
     subcategories: ['Espresso & Coffee Machines', 'Air Fryers & Blenders', 'Rishtan Ceramic Tableware', 'Cast Iron Kazans', 'Cookware Sets'],
+    subcategoriesUz: ['Kofemashinalar', 'Airfryer va blenderlar', 'Rishton sopol idishlari', 'Choʻyan qozonlar', 'Idishlar toʻplami'],
+    subcategoriesRu: ['Кофемашины', 'Аэрогрили и блендеры', 'Риштанская керамика', 'Чугунные казаны', 'Наборы посуды'],
     filterOptions: ['Appliance Wattage', 'Material (Ceramic/Cast Iron)', 'Dishwasher Safe', 'Capacity L', 'Brand'],
+    filterOptionsUz: ['Quvvati', 'Material (Keramika/Choʻyan)', 'Idish yuvishga mos', 'Sigʻimi litr'],
+    filterOptionsRu: ['Мощность', 'Материал (Керамика/Чугун)', 'Можно в посудомойку', 'Объем л'],
   },
   {
     id: 'cat-sports',
@@ -122,7 +158,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['Home Gym & Dumbbells', 'Treadmills & Bikes', 'Chimgan Camping Gear', 'Football & Team Sports', 'Yoga & Pilates'],
+    subcategoriesUz: ['Uy trenajorlari va gantellar', 'Yugurish yoʻlakchalari', 'Chimyon turizm anjomlari', 'Futbol va jamoaviy sport', 'Yoga va fitnes'],
+    subcategoriesRu: ['Тренажеры и гантели', 'Беговые дорожки', 'Кемпинг и Чимган', 'Футбол и спорт', 'Йога и фитнес'],
     filterOptions: ['Sport Type', 'Weight Range', 'Indoor/Outdoor', 'Foldable', 'Brand'],
+    filterOptionsUz: ['Sport turi', 'Vazn toifasi', 'Ichki/Tashqi', 'Yigʻiluvchan'],
+    filterOptionsRu: ['Вид спорта', 'Вес', 'Для дома/улицы', 'Складной'],
   },
   {
     id: 'cat-toys',
@@ -134,7 +174,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['STEM & Robotics Kits', 'Building Blocks', 'RC Cars & Drones', 'Board Games', 'Plush & Dolls'],
+    subcategoriesUz: ['STEM va robototexnika', 'Konstruktorlar', 'Pultli mashina va dronlar', 'Stol oʻyinlari', 'Yumshoq oʻyinchoqlar'],
+    subcategoriesRu: ['STEM и робототехника', 'Конструкторы', 'Радиоуправляемые машинки и дроны', 'Настольные игры', 'Мягкие игрушки'],
     filterOptions: ['Age Group (0-14+)', 'Educational Focus', 'Safety Certified', 'Battery Included', 'Brand'],
+    filterOptionsUz: ['Yosh guruhi (0-14+)', 'Rivojlantiruvchi yoʻnalish', 'Xavfsizlik sertifikati', 'Batareya komplektda'],
+    filterOptionsRu: ['Возраст (0-14+)', 'Развивающий фокус', 'Сертификат безопасности', 'Батарейки в комплекте'],
   },
   {
     id: 'cat-books',
@@ -146,7 +190,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['Uzbek Literature Classics', 'Business & Finance', 'IT & Programming', 'World Bestsellers', 'Children’s Illustrated Books'],
+    subcategoriesUz: ['Oʻzbek adabiyoti durdonalari', 'Biznes va moliya', 'IT va dasturlash', 'Jahon bestsellerlari', 'Bolalar kitoblari'],
+    subcategoriesRu: ['Классика узбекской литературы', 'Бизнес и финансы', 'IT и программирование', 'Мировые бестселлеры', 'Детские книги'],
     filterOptions: ['Book Language (UZ/RU/EN)', 'Cover Type (Hardcover/Paperback)', 'Genre', 'Publisher', 'Publication Year'],
+    filterOptionsUz: ['Kitob tili (UZ/RU/EN)', 'Muqova turi (Qattiq/Yumshoq)', 'Janr', 'Nashriyot', 'Nashr yili'],
+    filterOptionsRu: ['Язык книги (UZ/RU/EN)', 'Обложка (Твердая/Мягкая)', 'Жанр', 'Издательство', 'Год издания'],
   },
   {
     id: 'cat-automotive',
@@ -158,7 +206,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['Dashcams & Radar Detectors', 'Chevrolet Cobalt/Gentra/Tracker Accessories', 'Car Audio', 'Tires & Rims', 'Car Care & Detailing'],
+    subcategoriesUz: ['Videoregistrator va radar-detektorlar', 'Cobalt/Gentra/Tracker aksessuarlari', 'Avtoakustika', 'Shinalar va disklar', 'Avtokosmetika'],
+    subcategoriesRu: ['Видеорегистраторы и антирадары', 'Аксессуары Cobalt/Gentra/Tracker', 'Автоакустика', 'Шины и диски', 'Автокосметика'],
     filterOptions: ['Vehicle Compatibility', 'GPS/Wi-Fi Support', 'Season', 'Warranty', 'Brand'],
+    filterOptionsUz: ['Mos avtomobil', 'GPS/Wi-Fi mavjudligi', 'Mavsum', 'Kafolat'],
+    filterOptionsRu: ['Совместимость', 'Наличие GPS/Wi-Fi', 'Сезон', 'Гарантия'],
   },
   {
     id: 'cat-health',
@@ -170,7 +222,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['Vitamins & Supplements', 'Blood Pressure Monitors', 'Massage Guns & Wellness', 'Orthopedic Support', 'Optical & Eyewear'],
+    subcategoriesUz: ['Vitaminlar va BAA', 'Qon bosimini oʻlchagichlar (Tonometr)', 'Massajyorlar va relaks', 'Ortopedik vositalar', 'Optika va koʻzoynaklar'],
+    subcategoriesRu: ['Витамины и БАДы', 'Тонометры и измерение давления', 'Массажеры и релакс', 'Ортопедические изделия', 'Оптика и очки'],
     filterOptions: ['Certification', 'Form Factor', 'Digital Smart Sync', 'Brand', 'Origin'],
+    filterOptionsUz: ['Sertifikat', 'Shakli', 'Smart sinxronizatsiya', 'Brend'],
+    filterOptionsRu: ['Сертификация', 'Форма выпуска', 'Смарт синхронизация', 'Бренд'],
   },
   {
     id: 'cat-baby',
@@ -182,7 +238,11 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=800&q=80',
     productCount: 3,
     subcategories: ['Strollers & Car Seats', 'Diapers & Hygiene', 'Baby Monitors', 'Feeding & Organic Formula', 'Nursery Furniture'],
+    subcategoriesUz: ['Bolalar aravachalari va avto-kreslolar', 'Tagliklar (pampers) va gigiyena', 'Radioenagalar va kameralar', 'Bolalar ovqatlari', 'Bolalar xonasi mebellari'],
+    subcategoriesRu: ['Коляски и автокресла', 'Подгузники и гигиена', 'Видеоняни', 'Детское питание', 'Детская мебель'],
     filterOptions: ['Baby Age (0-36m)', 'Hypoallergenic', 'Safety Standard (ISOFIX)', 'Weight Limit', 'Brand'],
+    filterOptionsUz: ['Bolalar yoshi (0-36 oylik)', 'Gipoallergen', 'Xavfsizlik standarti (ISOFIX)', 'Vazn chegarasi'],
+    filterOptionsRu: ['Возраст (0-36 мес)', 'Гипоаллергенно', 'Стандарт безопасности (ISOFIX)', 'Предел веса'],
   },
   {
     id: 'cat-accessories',
@@ -194,7 +254,10 @@ export const CATEGORIES = [
     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
     productCount: 5,
     subcategories: ['Smartwatches & Bands', 'Leather Bags & Backpacks', 'Sunglasses', 'Powerbanks & MagSafe Chargers', 'Silver & Fine Jewelry'],
+    subcategoriesUz: ['Aqlli soatlar va bilaguzuklar', 'Charm sumkalar va ryukzaklar', 'Quyosh koʻzoynaklari', 'Powerbank va MagSafe quvvatlagichlar', 'Kumush va zargarlik buyumlari'],
+    subcategoriesRu: ['Смарт-часы и браслеты', 'Кожаные сумки и рюкзаки', 'Солнцезащитные очки', 'Повербанки и MagSafe', 'Серебро и украшения'],
     filterOptions: ['Material', 'Water Resistance', 'Compatibility', 'Gender', 'Brand'],
+    filterOptionsUz: ['Material', 'Suvga chidamlilik', 'Moslik', 'Jinsi', 'Brend'],
+    filterOptionsRu: ['Материал', 'Водонепроницаемость', 'Совместимость', 'Пол', 'Бренд'],
   },
 ];
-

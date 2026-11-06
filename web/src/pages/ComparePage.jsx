@@ -13,7 +13,12 @@ import {
   Plus,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
-import { formatUzs, getLocalizedTitle } from '@shared/utils/formatters';
+import {
+  formatUzs,
+  getLocalizedTitle,
+  getLocalizedSpecLabel,
+  getLocalizedDeliveryEta,
+} from '@shared/utils/formatters';
 
 export default function ComparePage() {
   const {
@@ -205,7 +210,7 @@ export default function ComparePage() {
                   gridTemplateColumns: `180px repeat(${comparedProducts.length}, minmax(180px, 1fr))`,
                 }}
               >
-                <div>Parametr</div>
+                <div>{lang === 'uz' ? 'Parametr' : lang === 'ru' ? 'Параметр' : 'Parameter'}</div>
                 {comparedProducts.map((p) => (
                   <div key={p.id} className="truncate">
                     {p.brand} {p.nameUz?.split(' ')[1] || ''}
@@ -221,7 +226,7 @@ export default function ComparePage() {
                     gridTemplateColumns: `180px repeat(${comparedProducts.length}, minmax(180px, 1fr))`,
                   }}
                 >
-                  <div className="font-semibold text-slate-700">{key}</div>
+                  <div className="font-semibold text-slate-700">{getLocalizedSpecLabel(key, lang)}</div>
                   {comparedProducts.map((p) => (
                     <div key={p.id} className="text-slate-900 font-medium">
                       {p.specifications?.[key] || '—'}
@@ -239,11 +244,11 @@ export default function ComparePage() {
               >
                 <div className="font-semibold text-slate-700 flex items-center gap-1">
                   <Truck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Yetkazib berish</span>
+                  <span>{lang === 'uz' ? 'Yetkazib berish' : lang === 'ru' ? 'Доставка' : 'Delivery'}</span>
                 </div>
                 {comparedProducts.map((p) => (
                   <div key={p.id} className="text-emerald-700 font-bold">
-                    {p.sellerOffers?.[0]?.deliveryEta || '90 mins Express'}
+                    {getLocalizedDeliveryEta(p.sellerOffers?.[0]?.deliveryEta || '90 mins Express', lang)}
                   </div>
                 ))}
               </div>

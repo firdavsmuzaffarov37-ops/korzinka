@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { DELIVERY_METHODS, PAYMENT_PROVIDERS, UZBEKISTAN_CITIES } from '@shared/types';
-import { formatUzs } from '@shared/utils/formatters';
+import { formatUzs, getLocalizedTitle } from '@shared/utils/formatters';
 import InteractiveMap from '../components/InteractiveMap';
 import { initiatePaymentSession } from '../services/paymentService';
 import PaymentModal from '../components/PaymentModal';
@@ -27,6 +27,7 @@ const TIME_SLOTS = [
 export default function CheckoutPage() {
   const {
     lang,
+    t,
     user,
     selectedCity,
     enrichedCart,
@@ -76,12 +77,12 @@ export default function CheckoutPage() {
   if (enrichedCart.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
-        <h1 className="text-2xl font-black text-slate-900">No items to checkout</h1>
+        <h1 className="text-2xl font-black text-slate-900">{t.noItemsToCheckout}</h1>
         <Link
           to="/catalog"
           className="inline-block px-6 py-3 rounded-2xl bg-emerald-600 text-white text-xs font-bold"
         >
-          Return to Marketplace
+          {t.returnToShop}
         </Link>
       </div>
     );
@@ -132,14 +133,51 @@ export default function CheckoutPage() {
   const cityObj =
     UZBEKISTAN_CITIES.find((c) => c.nameEn === city) || UZBEKISTAN_CITIES[0];
 
+  const timeSlotLabels = {
+    [TIME_SLOTS[0]]: t.timeSlotAsap,
+    [TIME_SLOTS[1]]: t.timeSlotToday14,
+    [TIME_SLOTS[2]]: t.timeSlotToday18,
+    [TIME_SLOTS[3]]: t.timeSlotTomorrow,
+  };
+
+  const getProviderBadge = (prov) => {
+    if (lang === 'uz') {
+      if (prov.id === 'click' || prov.id === 'payme') return 'Rasmiy API • Sandbox';
+      if (prov.id === 'uzum') return '0% Nasiya aksiyasi';
+      return 'Oldindan toʻlovsiz';
+    }
+    if (lang === 'ru') {
+      if (prov.id === 'click' || prov.id === 'payme') return 'Официальный API • Sandbox';
+      if (prov.id === 'uzum') return '0% Рассрочка';
+      return 'Без предоплаты';
+    }
+    return prov.badge;
+  };
+
+  const getProviderSubtitle = (prov) => {
+    if (lang === 'uz') {
+      if (prov.id === 'click') return 'Click Up yoki *880# orqali lahzada toʻlash';
+      if (prov.id === 'payme') return 'Payme orqali xavfsiz toʻlov';
+      if (prov.id === 'uzum') return 'Toʻliq toʻlash yoki 3/6/12 oy muddatli toʻlov';
+      return 'Yetkazilganda naqd, Uzcard yoki Humo orqali toʻlash';
+    }
+    if (lang === 'ru') {
+      if (prov.id === 'click') return 'Мгновенная оплата через Click Up / *880#';
+      if (prov.id === 'payme') return 'Безопасная оплата через Payme';
+      if (prov.id === 'uzum') return 'Оплата сразу или в рассрочку на 3/6/12 месяцев';
+      return 'Оплата курьеру наличными, Uzcard или Humo';
+    }
+    return prov.subtitle;
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
-          Secure Checkout & Fast Delivery
+          {t.checkoutTitle}
         </h1>
         <p className="text-xs text-slate-500 mt-0.5">
-          Official Click, Payme & Uzum Bank tokenized integration — SAVDOX never stores raw card numbers or CVV
+          {t.checkoutSubtitle}
         </p>
       </div>
 
@@ -153,13 +191,13 @@ export default function CheckoutPage() {
           <div className="rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-4">
             <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-emerald-600" />
-              1. Customer & Delivery Location
+              {t.step1Title}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Recipient Full Name
+                  {t.recipientNameLabel}
                 </label>
                 <input
                   type="text"
@@ -171,7 +209,7 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Phone Number (+998)
+                  {t.phoneInputLabel}
                 </label>
                 <input
                   type="tel"
@@ -182,7 +220,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">City</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">{t.citySelectLabel}</label>
                 <select
                   value={city}
                   onChange={(e) => {
@@ -198,14 +236,14 @@ export default function CheckoutPage() {
                 >
                   {UZBEKISTAN_CITIES.map((c) => (
                     <option key={c.id} value={c.nameEn}>
-                      {c.nameEn}
+                      {lang === 'uz' ? c.nameUz : lang === 'ru' ? c.nameRu : c.nameEn}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  District / Tuman
+                  {t.districtSelectLabel}
                 </label>
                 <select
                   value={district}
@@ -223,7 +261,7 @@ export default function CheckoutPage() {
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                Street Address, Building & Apartment
+                {t.streetAddressLabel}
               </label>
               <input
                 type="text"
@@ -237,7 +275,7 @@ export default function CheckoutPage() {
             {/* Interactive Map Location Pin */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Interactive Map Drop-off Pin (Click anywhere on the map to move pin)
+                {t.mapPinInstruction}
               </label>
               <InteractiveMap
                 city={city}
@@ -254,7 +292,7 @@ export default function CheckoutPage() {
           <div className="rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-4">
             <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
               <Truck className="w-5 h-5 text-emerald-600" />
-              2. Delivery Method & Preferred Time
+              {t.step2Title}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -283,16 +321,16 @@ export default function CheckoutPage() {
                             : method.nameEn}
                         </span>
                         <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                          {method.badge}
+                          {lang === 'uz' ? (method.id === 'express_2h' ? 'Eng tezkor' : method.id === 'same_day' ? 'Ommabop' : 'Bepul') : method.badge}
                         </span>
                       </div>
                       <div className="text-xs text-slate-500 mt-1">
-                        ETA: {method.etaText}
+                        {lang === 'uz' ? 'Yetkazish:' : 'ETA:'} {method.etaText}
                       </div>
                     </div>
                     <div className="mt-2 text-xs font-black text-emerald-700">
                       {isFree || method.feeUzs === 0
-                        ? 'FREE'
+                        ? t.freeDeliveryBadge
                         : formatUzs(method.feeUzs, lang)}
                     </div>
                   </button>
@@ -303,7 +341,7 @@ export default function CheckoutPage() {
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-emerald-600" />
-                Delivery Time Slot
+                {t.timeSlotLabel}
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {TIME_SLOTS.map((slot) => (
@@ -317,7 +355,7 @@ export default function CheckoutPage() {
                         : 'border-slate-200 bg-slate-50 text-slate-700'
                     }`}
                   >
-                    {slot}
+                    {timeSlotLabels[slot] || slot}
                   </button>
                 ))}
               </div>
@@ -329,11 +367,11 @@ export default function CheckoutPage() {
             <div className="flex items-center justify-between flex-wrap gap-2">
               <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-emerald-600" />
-                3. Official Uzbekistan Payment Method
+                {t.step3Title}
               </h2>
               <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                 <Lock className="w-3 h-3 text-emerald-600" />
-                Sandbox Tokenized Mode • No Raw Card/CVV Stored
+                {t.securePaymentNotice}
               </span>
             </div>
 
@@ -357,10 +395,10 @@ export default function CheckoutPage() {
                       className="px-2 py-0.5 rounded-full text-[10px] font-bold text-white"
                       style={{ backgroundColor: prov.color }}
                     >
-                      {prov.badge}
+                      {getProviderBadge(prov)}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500">{prov.subtitle}</p>
+                  <p className="text-xs text-slate-500">{getProviderSubtitle(prov)}</p>
                 </button>
               ))}
             </div>
@@ -369,7 +407,7 @@ export default function CheckoutPage() {
 
         {/* Right Column: Order Summary & Confirm Button (4 Cols) */}
         <div className="lg:col-span-4 rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-5 sticky top-28">
-          <h2 className="text-lg font-extrabold text-slate-900">Order Summary</h2>
+          <h2 className="text-lg font-extrabold text-slate-900">{t.orderSummary}</h2>
 
           {/* Mini Items List */}
           <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1 divide-y divide-slate-100">
@@ -383,7 +421,7 @@ export default function CheckoutPage() {
                   />
                   <div className="truncate">
                     <div className="font-bold text-slate-900 truncate">
-                      {item.product.nameEn}
+                      {getLocalizedTitle(item.product, lang)}
                     </div>
                     <div className="text-slate-400">
                       {item.quantity} × {formatUzs(item.unitPriceUzs, lang)}
@@ -403,10 +441,10 @@ export default function CheckoutPage() {
               <Gift className="w-4 h-4 text-amber-600 shrink-0" />
               <div>
                 <div className="text-xs font-extrabold text-slate-900">
-                  Use SAVDOX Bonus Points
+                  {t.useBonusWalletLabel}
                 </div>
                 <div className="text-[11px] text-slate-600">
-                  Available: {bonusWallet.pointsBalance.toLocaleString()} UZS
+                  {t.availableBonusBalance} {formatUzs(bonusWallet.pointsBalance, lang)}
                 </div>
               </div>
             </div>
@@ -421,31 +459,31 @@ export default function CheckoutPage() {
           {/* Totals */}
           <div className="space-y-2 pt-3 border-t border-slate-100 text-xs">
             <div className="flex justify-between text-slate-600">
-              <span>Products Subtotal</span>
+              <span>{t.productsSubtotal}</span>
               <span className="font-bold text-slate-900">
                 {formatUzs(cartSubtotalUzs, lang)}
               </span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>Delivery ({selectedDeliveryObj.nameEn})</span>
+              <span>{t.estimatedDelivery} ({lang === 'uz' ? selectedDeliveryObj.nameUz : lang === 'ru' ? selectedDeliveryObj.nameRu : selectedDeliveryObj.nameEn})</span>
               <span className="font-bold text-emerald-700">
-                {deliveryFeeUzs === 0 ? 'FREE' : formatUzs(deliveryFeeUzs, lang)}
+                {deliveryFeeUzs === 0 ? t.freeDeliveryBadge : formatUzs(deliveryFeeUzs, lang)}
               </span>
             </div>
             {couponDiscountUzs > 0 && (
               <div className="flex justify-between text-rose-600 font-bold">
-                <span>Promo Coupon Discount</span>
+                <span>{t.couponDiscountLabel}</span>
                 <span>-{formatUzs(couponDiscountUzs, lang)}</span>
               </div>
             )}
             {bonusPointsUzs > 0 && (
               <div className="flex justify-between text-amber-700 font-bold">
-                <span>SAVDOX Bonus Redeemed</span>
+                <span>{t.bonusDiscountLabel}</span>
                 <span>-{formatUzs(bonusPointsUzs, lang)}</span>
               </div>
             )}
             <div className="pt-3 border-t border-slate-200 flex justify-between items-baseline">
-              <span className="text-sm font-extrabold text-slate-900">Total to Pay</span>
+              <span className="text-sm font-extrabold text-slate-900">{t.totalToPay}</span>
               <span className="text-xl font-black text-emerald-700">
                 {formatUzs(finalTotalUzs, lang)}
               </span>
@@ -460,8 +498,8 @@ export default function CheckoutPage() {
             <CheckCircle2 className="w-4 h-4" />
             <span>
               {isProcessing
-                ? 'Authorizing Sandbox Session...'
-                : `Confirm & Pay via ${paymentMethodId.toUpperCase()}`}
+                ? t.authorizingSession
+                : `${t.confirmAndPayBtn} (${paymentMethodId.toUpperCase()})`}
             </span>
           </button>
 
@@ -474,7 +512,7 @@ export default function CheckoutPage() {
           <div className="flex items-center gap-2 text-[11px] text-slate-500">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>
-              100% Buyer Protection: Funds are held in escrow until courier delivery is confirmed.
+              {t.buyerProtectionNotice}
             </span>
           </div>
         </div>

@@ -10,7 +10,7 @@ import {
   Truck,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
-import { formatUzs, getLocalizedTitle } from '@shared/utils/formatters';
+import { formatUzs, getLocalizedTitle, getLocalizedColor } from '@shared/utils/formatters';
 
 export default function CartPage() {
   const {
@@ -46,15 +46,15 @@ export default function CartPage() {
         <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
           <ShoppingCart className="w-8 h-8" />
         </div>
-        <h1 className="text-2xl font-black text-slate-900">Your SAVDOX Cart is Empty</h1>
+        <h1 className="text-2xl font-black text-slate-900">{t.cartEmptyTitle}</h1>
         <p className="text-sm text-slate-500 max-w-md mx-auto">
-          Explore 16 categories of verified products or ask our AI Shopping Assistant to build a shopping list within your UZS budget.
+          {t.cartEmptySubtitle}
         </p>
         <Link
           to="/catalog"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition"
         >
-          <span>Browse Products</span>
+          <span>{t.browseProducts}</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -66,10 +66,10 @@ export default function CartPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
-            Shopping Cart ({enrichedCart.reduce((s, i) => s + i.quantity, 0)} Items)
+            {t.cartTitle} ({enrichedCart.reduce((s, i) => s + i.quantity, 0)} {t.cartItemsCount})
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Items are automatically grouped by verified seller for transparent fulfillment
+            {t.groupedBySeller}
           </p>
         </div>
         <button
@@ -77,7 +77,7 @@ export default function CartPage() {
           onClick={clearCart}
           className="text-xs font-bold text-rose-600 hover:underline inline-flex items-center gap-1"
         >
-          <Trash2 className="w-3.5 h-3.5" /> Clear Cart
+          <Trash2 className="w-3.5 h-3.5" /> {t.clearCart}
         </button>
       </div>
 
@@ -94,12 +94,12 @@ export default function CartPage() {
                 <div className="flex items-center gap-2">
                   <Store className="w-4 h-4 text-emerald-600" />
                   <span className="text-xs font-extrabold text-slate-900">
-                    Seller: {group.sellerName}
+                    {t.sellerGroupLabel} {group.sellerName}
                   </span>
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 </div>
                 <span className="text-xs font-bold text-emerald-800">
-                  Store Subtotal: {formatUzs(group.sellerSubtotalUzs, lang)}
+                  {t.storeSubtotalLabel} {formatUzs(group.sellerSubtotalUzs, lang)}
                 </span>
               </div>
 
@@ -114,7 +114,7 @@ export default function CartPage() {
                       <Link to={`/product/${item.productId}`} className="shrink-0">
                         <img
                           src={item.product.images?.[0]}
-                          alt={item.product.nameEn}
+                          alt={getLocalizedTitle(item.product, lang)}
                           className="w-20 h-20 rounded-2xl object-cover border border-slate-200"
                         />
                       </Link>
@@ -140,7 +140,7 @@ export default function CartPage() {
                             >
                               {item.product.colors.map((c) => (
                                 <option key={c.name} value={c.name}>
-                                  Color: {c.name}
+                                  {t.colorLabel} {getLocalizedColor(c.name, lang)}
                                 </option>
                               ))}
                             </select>
@@ -166,7 +166,7 @@ export default function CartPage() {
                         </div>
 
                         <div className="text-xs text-slate-500">
-                          Unit Price: <strong className="text-slate-800">{formatUzs(item.unitPriceUzs, lang)}</strong>
+                          {t.unitPriceLabel} <strong className="text-slate-800">{formatUzs(item.unitPriceUzs, lang)}</strong>
                         </div>
                       </div>
                     </div>
@@ -200,7 +200,7 @@ export default function CartPage() {
                           onClick={() => removeFromCart(item.id)}
                           className="text-[11px] font-semibold text-rose-500 hover:underline mt-0.5"
                         >
-                          Remove
+                          {t.removeItem}
                         </button>
                       </div>
                     </div>
@@ -213,12 +213,12 @@ export default function CartPage() {
 
         {/* Right: Order Summary & Promo Code (4 Cols) */}
         <div className="lg:col-span-4 rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-5 sticky top-28">
-          <h2 className="text-lg font-extrabold text-slate-900">Order Summary</h2>
+          <h2 className="text-lg font-extrabold text-slate-900">{t.orderSummary}</h2>
 
           {/* Coupon Input */}
           <div className="space-y-2">
             <label className="block text-xs font-bold text-slate-700">
-              Promo / Coupon Code
+              {t.promoCodeLabel}
             </label>
             <div className="flex gap-2">
               <input
@@ -233,7 +233,7 @@ export default function CartPage() {
                 onClick={() => applyCouponCode(couponInput)}
                 className="px-4 py-2 rounded-xl bg-emerald-900 hover:bg-emerald-800 text-white text-xs font-bold"
               >
-                Apply
+                {t.applyBtnShort}
               </button>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -257,29 +257,29 @@ export default function CartPage() {
           {/* Price Breakdown */}
           <div className="space-y-2.5 pt-3 border-t border-slate-100 text-xs">
             <div className="flex justify-between text-slate-600">
-              <span>Items Subtotal ({cartGroupedBySeller.length} stores)</span>
+              <span>{t.productsSubtotal} ({cartGroupedBySeller.length} {lang === 'uz' ? 'ta doʻkon' : lang === 'ru' ? 'магазинов' : 'stores'})</span>
               <span className="font-bold text-slate-900">
                 {formatUzs(cartSubtotalUzs, lang)}
               </span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>Estimated Delivery Fee</span>
+              <span>{t.estimatedDelivery}</span>
               <span className="font-bold text-emerald-700">
                 {estimatedDeliveryUzs === 0
-                  ? 'FREE (Over 500k UZS)'
+                  ? `${t.freeDeliveryBadge} (${lang === 'uz' ? '500 000 soʻmdan yuqori' : lang === 'ru' ? 'От 500 000 сум' : 'Over 500k UZS'})`
                   : formatUzs(estimatedDeliveryUzs, lang)}
               </span>
             </div>
             {couponDiscountUzs > 0 && (
               <div className="flex justify-between text-rose-600 font-bold">
                 <span className="flex items-center gap-1">
-                  Discount ({appliedCoupon?.code})
+                  {t.couponDiscountLabel} ({appliedCoupon?.code})
                   <button
                     type="button"
                     onClick={() => setAppliedCoupon(null)}
                     className="text-[10px] underline ml-1"
                   >
-                    remove
+                    {t.removeItem}
                   </button>
                 </span>
                 <span>-{formatUzs(couponDiscountUzs, lang)}</span>
@@ -287,7 +287,7 @@ export default function CartPage() {
             )}
 
             <div className="pt-3 border-t border-slate-200 flex justify-between items-baseline">
-              <span className="text-sm font-extrabold text-slate-900">Final Total</span>
+              <span className="text-sm font-extrabold text-slate-900">{t.totalToPay}</span>
               <span className="text-xl font-black text-emerald-700">
                 {formatUzs(finalTotalUzs, lang)}
               </span>
@@ -299,14 +299,18 @@ export default function CartPage() {
             onClick={() => navigate('/checkout')}
             className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold inline-flex items-center justify-center gap-2 shadow-md transition"
           >
-            <span>{t.checkout}</span>
+            <span>{t.proceedToCheckout || t.checkout}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
           <div className="p-3 rounded-xl bg-slate-50 text-[11px] text-slate-500 flex items-center gap-2">
             <Truck className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>
-              90-Minute Express & Same-Day Delivery available across Uzbekistan at next step.
+              {lang === 'uz'
+                ? '90 daqiqada Express va bugun kuryer yetkazish butun Oʻzbekiston boʻylab mavjud.'
+                : lang === 'ru'
+                ? 'Экспресс за 90 минут и доставка день в день по всему Узбекистану.'
+                : '90-Minute Express & Same-Day Delivery available across Uzbekistan at next step.'}
             </span>
           </div>
         </div>

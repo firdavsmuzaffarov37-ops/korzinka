@@ -46,7 +46,7 @@ export default function ProductCard({ product }) {
           )}
           {product.isFlashSale && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-400 text-slate-950 shadow-sm">
-              <Zap className="w-3 h-3 fill-current" /> Flash
+              <Zap className="w-3 h-3 fill-current" /> {lang === 'uz' ? 'Chegirma' : lang === 'ru' ? 'Скидка' : 'Flash'}
             </span>
           )}
         </div>
@@ -59,7 +59,7 @@ export default function ProductCard({ product }) {
               e.preventDefault();
               toggleFavorite(product.id);
             }}
-            aria-label="Toggle favorite"
+            aria-label={t.favorites}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${isFavorite
                 ? 'bg-rose-50 text-rose-600 border border-rose-200'
                 : 'bg-white/90 text-slate-600 hover:text-rose-600 hover:bg-white'
@@ -74,7 +74,9 @@ export default function ProductCard({ product }) {
               e.preventDefault();
               toggleCompare(product);
             }}
-            title={isCompared ? 'Solishtirishdan chiqarish' : 'Solishtirish'}
+            title={isCompared
+              ? (lang === 'uz' ? 'Taqqosdan chiqarish' : lang === 'ru' ? 'Удалить из сравнения' : 'Remove from compare')
+              : (lang === 'uz' ? 'Taqqoslash' : lang === 'ru' ? 'Сравнить' : 'Compare')}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${isCompared
                 ? 'bg-emerald-600 text-white shadow-md'
                 : 'bg-white/90 text-slate-600 hover:text-emerald-700 hover:bg-white'

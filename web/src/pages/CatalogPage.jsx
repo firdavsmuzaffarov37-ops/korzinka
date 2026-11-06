@@ -166,20 +166,28 @@ export default function CatalogPage() {
                 >
                   {t.allSubcategories}
                 </button>
-                {activeCategoryObj.subcategories.map((sub) => (
-                  <button
-                    key={sub}
-                    type="button"
-                    onClick={() => setSelectedSubcategory(sub)}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition ${
-                      selectedSubcategory === sub
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-emerald-50'
-                    }`}
-                  >
-                    {sub}
-                  </button>
-                ))}
+                {activeCategoryObj.subcategories.map((sub, idx) => {
+                  const localizedSub =
+                    lang === 'uz' && activeCategoryObj.subcategoriesUz?.[idx]
+                      ? activeCategoryObj.subcategoriesUz[idx]
+                      : lang === 'ru' && activeCategoryObj.subcategoriesRu?.[idx]
+                      ? activeCategoryObj.subcategoriesRu[idx]
+                      : sub;
+                  return (
+                    <button
+                      key={sub}
+                      type="button"
+                      onClick={() => setSelectedSubcategory(sub)}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition ${
+                        selectedSubcategory === sub
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-slate-100 text-slate-700 hover:bg-emerald-50'
+                      }`}
+                    >
+                      {localizedSub}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -190,14 +198,22 @@ export default function CatalogPage() {
               {t.categoryFacets}
             </div>
             <div className="flex flex-wrap gap-1">
-              {activeCategoryObj.filterOptions.map((opt) => (
-                <span
-                  key={opt}
-                  className="px-2 py-0.5 rounded-md bg-white text-[11px] font-medium text-emerald-800 border border-emerald-200"
-                >
-                  {opt}
-                </span>
-              ))}
+              {activeCategoryObj.filterOptions.map((opt, idx) => {
+                const localizedOpt =
+                  lang === 'uz' && activeCategoryObj.filterOptionsUz?.[idx]
+                    ? activeCategoryObj.filterOptionsUz[idx]
+                    : lang === 'ru' && activeCategoryObj.filterOptionsRu?.[idx]
+                    ? activeCategoryObj.filterOptionsRu[idx]
+                    : opt;
+                return (
+                  <span
+                    key={opt}
+                    className="px-2 py-0.5 rounded-md bg-white text-[11px] font-medium text-emerald-800 border border-emerald-200"
+                  >
+                    {localizedOpt}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -248,7 +264,9 @@ export default function CatalogPage() {
           <SlidersHorizontal className="w-4 h-4 text-emerald-600" />
           <span>{t.filters}</span>
           <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">
-            {showFiltersMobile ? '▲ Yopish' : '▼ Ochish'}
+            {showFiltersMobile
+              ? (lang === 'uz' ? '▲ Yopish' : lang === 'ru' ? '▲ Скрыть' : '▲ Close')
+              : (lang === 'uz' ? '▼ Ochish' : lang === 'ru' ? '▼ Показать' : '▼ Open')}
           </span>
         </button>
         <button

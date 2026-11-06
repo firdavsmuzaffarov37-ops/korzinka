@@ -96,9 +96,13 @@ export function MarketplaceProvider({ children }) {
     loadFromStorage(STORAGE_KEYS.CITY, UZBEKISTAN_CITIES[0])
   );
   const [user, setUser] = useState(() => loadFromStorage(STORAGE_KEYS.USER, DEFAULT_USER));
-  const [categories, setCategories] = useState(() =>
-    loadFromStorage(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES)
-  );
+  const [categories, setCategories] = useState(() => {
+    const cached = loadFromStorage(STORAGE_KEYS.CATEGORIES, null);
+    if (!cached || !cached[0]?.subcategoriesUz) {
+      return INITIAL_CATEGORIES;
+    }
+    return cached;
+  });
   const [products, setProducts] = useState(() => {
     const cached = loadFromStorage(STORAGE_KEYS.PRODUCTS, null);
     if (!cached || cached.length < INITIAL_PRODUCTS.length) {

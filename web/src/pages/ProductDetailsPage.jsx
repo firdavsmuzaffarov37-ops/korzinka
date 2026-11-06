@@ -21,6 +21,10 @@ import {
   getLocalizedTitle,
   getLocalizedDescription,
   calculateInstallmentUzs,
+  getLocalizedColor,
+  getLocalizedSpecLabel,
+  getLocalizedDeliveryEta,
+  getLocalizedWarranty,
 } from '@shared/utils/formatters';
 
 export default function ProductDetailsPage() {
@@ -179,9 +183,9 @@ export default function ProductDetailsPage() {
               <div className="flex items-center gap-1.5 font-bold text-slate-800">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                 <span>{product.rating}</span>
-                <span className="text-slate-400">({product.reviewCount} reviews)</span>
+                <span className="text-slate-400">({product.reviewCount} {t.reviewsCountLabel || (lang === 'uz' ? 'ta sharh' : lang === 'ru' ? 'отзывов' : 'reviews')})</span>
                 <span>•</span>
-                <span className="text-emerald-700">{product.soldCount} sold</span>
+                <span className="text-emerald-700">{product.soldCount} {lang === 'uz' ? 'ta xarid' : lang === 'ru' ? 'продано' : 'sold'}</span>
               </div>
             </div>
 
@@ -204,10 +208,10 @@ export default function ProductDetailsPage() {
 
               <div className="text-right">
                 <span className="inline-block px-3 py-1 rounded-xl bg-emerald-100 text-emerald-900 text-xs font-extrabold">
-                  0% Installment: {formatUzs(calculateInstallmentUzs(product.priceUzs, 6), lang)} / mo × 6
+                  {lang === 'uz' ? '0% Muddatli toʻlov:' : lang === 'ru' ? '0% Рассрочка:' : '0% Installment:'} {formatUzs(calculateInstallmentUzs(product.priceUzs, 6), lang)} {t.perMonth}
                 </span>
                 <div className="text-[11px] text-slate-500 mt-1">
-                  Via Uzum Nasiya, Click, or Payme
+                  {lang === 'uz' ? 'Uzum Nasiya, Click yoki Payme orqali' : lang === 'ru' ? 'Через Uzum Nasiya, Click или Payme' : 'Via Uzum Nasiya, Click, or Payme'}
                 </div>
               </div>
             </div>
@@ -216,7 +220,7 @@ export default function ProductDetailsPage() {
             {product.colors?.length > 0 && (
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  Available Color: <span className="text-emerald-700">{selectedColor}</span>
+                  {t.availableColorsLabel || (lang === 'uz' ? 'Mavjud ranglar:' : 'Available Colors:')} <span className="text-emerald-700 font-bold">{getLocalizedColor(selectedColor, lang)}</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {product.colors.map((c) => (
@@ -234,7 +238,7 @@ export default function ProductDetailsPage() {
                         className="w-3.5 h-3.5 rounded-full border border-slate-300"
                         style={{ backgroundColor: c.hex }}
                       />
-                      <span>{c.name}</span>
+                      <span>{getLocalizedColor(c.name, lang)}</span>
                     </button>
                   ))}
                 </div>
@@ -245,7 +249,7 @@ export default function ProductDetailsPage() {
             {product.sizes?.length > 0 && (
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  Size / Configuration: <span className="text-emerald-700">{selectedSize}</span>
+                  {t.availableSizesLabel || (lang === 'uz' ? 'Oʻlcham / Konfiguratsiya:' : 'Size / Configuration:')} <span className="text-emerald-700 font-bold">{selectedSize}</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((sz) => (
@@ -361,7 +365,7 @@ export default function ProductDetailsPage() {
                 to={`/catalog?seller=${encodeURIComponent(product.sellerName)}`}
                 className="text-xs font-bold text-emerald-700 hover:underline"
               >
-                Store →
+                {lang === 'uz' ? 'Doʻkonga oʻtish →' : lang === 'ru' ? 'В магазин →' : 'Store →'}
               </Link>
             </div>
 
@@ -371,10 +375,10 @@ export default function ProductDetailsPage() {
               </div>
               <div>
                 <div className="text-xs font-extrabold text-slate-900">
-                  Fast Delivery to {selectedCity.nameEn}
+                  {t.fastDeliveryPrefix || (lang === 'uz' ? 'Tezkor yetkazish:' : 'Fast Delivery to')} {lang === 'uz' ? selectedCity.nameUz : lang === 'ru' ? selectedCity.nameRu : selectedCity.nameEn}
                 </div>
                 <div className="text-[11px] text-slate-600">
-                  Express 90 mins • Same-Day Courier • Free Pickup
+                  {lang === 'uz' ? '90 daqiqada Express • Bugun kuryer • Bepul punkt' : lang === 'ru' ? 'Экспресс 90 мин • Сегодня курьером • Самовывоз' : 'Express 90 mins • Same-Day Courier • Free Pickup'}
                 </div>
               </div>
             </div>
@@ -387,7 +391,7 @@ export default function ProductDetailsPage() {
         <section className="rounded-3xl bg-white border border-slate-200 p-6 shadow-soft">
           <h2 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-emerald-600" />
-            {t.priceComparison} ({product.sellerOffers.length} Verified Sellers)
+            {t.priceComparison} ({product.sellerOffers.length} {lang === 'uz' ? 'ta doʻkon taklifi' : lang === 'ru' ? 'предложений' : 'Verified Sellers'})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {product.sellerOffers.map((offer, index) => (
@@ -412,7 +416,7 @@ export default function ProductDetailsPage() {
                     {formatUzs(offer.priceUzs, lang)}
                   </div>
                   <div className="text-xs text-slate-500 mt-1">
-                    🚚 {offer.deliveryEta} • 🛡️ {offer.warranty}
+                    🚚 {getLocalizedDeliveryEta(offer.deliveryEta, lang)} • 🛡️ {getLocalizedWarranty(offer.warranty, lang)}
                   </div>
                 </div>
                 <button
@@ -428,7 +432,7 @@ export default function ProductDetailsPage() {
                   }
                   className="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition"
                 >
-                  Select Offer & Add to Cart
+                  {t.selectOfferAndCart || (lang === 'uz' ? 'Taklifni tanlash va savatga' : 'Select Offer & Add to Cart')}
                 </button>
               </div>
             ))}
@@ -439,26 +443,26 @@ export default function ProductDetailsPage() {
       {/* 4. DESCRIPTION & SPECIFICATIONS */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-6 rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-3">
-          <h2 className="text-lg font-extrabold text-slate-900">Product Description</h2>
+          <h2 className="text-lg font-extrabold text-slate-900">{t.productDescriptionTitle || (lang === 'uz' ? 'Mahsulot tavsifi' : 'Product Description')}</h2>
           <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
           <div className="pt-3 flex flex-wrap gap-2">
             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold">
-              ✓ 100% Original Sealed Product
+              ✓ {lang === 'uz' ? '100% Asl qadoqlangan tovar' : lang === 'ru' ? '100% Оригинальный запечатанный товар' : '100% Original Sealed Product'}
             </span>
             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold">
-              ✓ Official Service Warranty
+              ✓ {t.officialWarrantyPill || (lang === 'uz' ? 'Rasmiy servis kafolati' : 'Official Service Warranty')}
             </span>
           </div>
         </div>
 
         <div className="lg:col-span-6 rounded-3xl bg-white border border-slate-200 p-6 shadow-soft">
           <h2 className="text-lg font-extrabold text-slate-900 mb-3">
-            Technical Specifications
+            {t.technicalSpecsTitle || (lang === 'uz' ? 'Texnik xususiyatlar' : 'Technical Specifications')}
           </h2>
           <dl className="divide-y divide-slate-100 text-xs">
             {Object.entries(product.specifications || {}).map(([key, val]) => (
               <div key={key} className="py-2.5 flex justify-between gap-4">
-                <dt className="font-semibold text-slate-500">{key}</dt>
+                <dt className="font-semibold text-slate-500">{getLocalizedSpecLabel(key, lang)}</dt>
                 <dd className="font-bold text-slate-900 text-right">{val}</dd>
               </div>
             ))}
@@ -471,7 +475,7 @@ export default function ProductDetailsPage() {
         <div className="lg:col-span-7 rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-4">
           <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-emerald-600" />
-            Verified Customer Reviews ({productReviews.length})
+            {t.customerReviewsTitle || (lang === 'uz' ? 'Tasdiqlangan xaridorlar sharhlari' : 'Verified Customer Reviews')} ({productReviews.length})
           </h2>
 
           {productReviews.length > 0 ? (
@@ -487,7 +491,7 @@ export default function ProductDetailsPage() {
                         {rev.userName}
                       </span>
                       <span className="ml-2 text-[11px] text-emerald-700 font-semibold">
-                        ✓ Verified Purchase ({rev.city})
+                        ✓ {lang === 'uz' ? 'Tasdiqlangan xarid' : lang === 'ru' ? 'Проверенная покупка' : 'Verified Purchase'} ({rev.city})
                       </span>
                     </div>
                     <span className="text-xs font-bold text-amber-500">
@@ -496,13 +500,13 @@ export default function ProductDetailsPage() {
                   </div>
                   {rev.pros && (
                     <div className="text-xs text-slate-700">
-                      <strong className="text-emerald-700">Pros:</strong> {rev.pros}
+                      <strong className="text-emerald-700">{lang === 'uz' ? 'Afzalliklari:' : lang === 'ru' ? 'Плюсы:' : 'Pros:'}</strong> {rev.pros}
                     </div>
                   )}
                   <p className="text-xs text-slate-600 leading-relaxed">{rev.comment}</p>
                   {rev.sellerReply && (
                     <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950">
-                      <strong>Seller Reply ({product.sellerName}):</strong> {rev.sellerReply}
+                      <strong>{lang === 'uz' ? 'Sotuvchi javobi' : lang === 'ru' ? 'Ответ продавца' : 'Seller Reply'} ({product.sellerName}):</strong> {rev.sellerReply}
                     </div>
                   )}
                 </div>
@@ -510,7 +514,7 @@ export default function ProductDetailsPage() {
             </div>
           ) : (
             <p className="text-xs text-slate-500">
-              Be the first verified shopper to review this product!
+              {lang === 'uz' ? 'Ushbu mahsulotga birinchi boʻlib sharh qoldiring!' : lang === 'ru' ? 'Станьте первым, кто оставит отзыв об этом товаре!' : 'Be the first verified shopper to review this product!'}
             </p>
           )}
         </div>
@@ -521,40 +525,44 @@ export default function ProductDetailsPage() {
           className="lg:col-span-5 rounded-3xl bg-white border border-slate-200 p-6 shadow-soft space-y-3"
         >
           <h3 className="text-base font-extrabold text-slate-900">
-            Write a Customer Review
+            {t.writeReviewTitle || (lang === 'uz' ? 'Sharh qoldirish' : 'Write a Customer Review')}
           </h3>
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Rating</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">
+              {t.yourRatingLabel || (lang === 'uz' ? 'Bahoingiz:' : 'Rating')}
+            </label>
             <select
               value={reviewRating}
               onChange={(e) => setReviewRating(Number(e.target.value))}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold bg-white"
             >
-              <option value={5}>★★★★★ (5/5 Excellent)</option>
-              <option value={4}>★★★★☆ (4/5 Good)</option>
-              <option value={3}>★★★☆☆ (3/5 Average)</option>
+              <option value={5}>★★★★★ (5/5 {lang === 'uz' ? 'Aʼlo' : lang === 'ru' ? 'Отлично' : 'Excellent'})</option>
+              <option value={4}>★★★★☆ (4/5 {lang === 'uz' ? 'Yaxshi' : lang === 'ru' ? 'Хорошо' : 'Good'})</option>
+              <option value={3}>★★★☆☆ (3/5 {lang === 'uz' ? 'Oʻrtacha' : lang === 'ru' ? 'Средне' : 'Average'})</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Pros</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">
+              {lang === 'uz' ? 'Afzalliklari' : lang === 'ru' ? 'Преимущества' : 'Pros'}
+            </label>
             <input
               type="text"
               value={reviewPros}
               onChange={(e) => setReviewPros(e.target.value)}
-              placeholder="Fast delivery, original warranty..."
+              placeholder={lang === 'uz' ? 'Tez yetkazildi, rasmiy kafolat...' : lang === 'ru' ? 'Быстрая доставка, официальная гарантия...' : 'Fast delivery, original warranty...'}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
             />
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              Your Review
+              {lang === 'uz' ? 'Sizning sharhingiz' : lang === 'ru' ? 'Ваш отзыв' : 'Your Review'}
             </label>
             <textarea
               rows={3}
               required
               value={reviewComment}
               onChange={(e) => setReviewComment(e.target.value)}
-              placeholder="Share your experience with this product..."
+              placeholder={t.reviewTextPlaceholder || (lang === 'uz' ? 'Mahsulot sifati, yetkazish tezligi haqida fikringizni yozing...' : 'Share your experience with this product...')}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
             />
           </div>
@@ -562,14 +570,16 @@ export default function ProductDetailsPage() {
             type="submit"
             className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition"
           >
-            Submit Verified Review
+            {t.sendReviewBtn || (lang === 'uz' ? 'Sharhni yuborish' : 'Submit Verified Review')}
           </button>
         </form>
       </section>
 
       {/* 6. SIMILAR PRODUCTS */}
       <section>
-        <h2 className="text-xl font-extrabold text-slate-900 mb-4">Similar Products</h2>
+        <h2 className="text-xl font-extrabold text-slate-900 mb-4">
+          {lang === 'uz' ? 'Oʻxshash mahsulotlar' : lang === 'ru' ? 'Похожие товары' : 'Similar Products'}
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {fallbackSimilar.map((item) => (
             <ProductCard key={item.id} product={item} />
