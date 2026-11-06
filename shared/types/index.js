@@ -94,11 +94,17 @@ export const DELIVERY_METHODS = [
 export const UZBEKISTAN_CITIES = [
   { id: 'tashkent', nameUz: 'Toshkent', nameRu: 'Ташкент', nameEn: 'Tashkent', lat: 41.2995, lng: 69.2401, districts: ['Yunusabad', 'Chilanzar', 'Mirzo Ulugbek', 'Yakkasaray', 'Shaykhantakhur', 'Mirobod', 'Sergeli', 'Olmazor'] },
   { id: 'samarkand', nameUz: 'Samarqand', nameRu: 'Самарканд', nameEn: 'Samarkand', lat: 39.6542, lng: 66.9597, districts: ['Siab', 'Bagishamal', 'Temiryul', 'Registan Center'] },
+  { id: 'fergana', nameUz: 'Fargʻona', nameRu: 'Фергана', nameEn: 'Fergana', lat: 40.3842, lng: 71.7843, districts: ['Margilan', 'Kokand Road', 'Al-Fergani', 'Kirguli'] },
   { id: 'bukhara', nameUz: 'Buxoro', nameRu: 'Бухара', nameEn: 'Bukhara', lat: 39.7747, lng: 64.4286, districts: ['Old City', 'Kogon', 'Gijduvan Road'] },
-  { id: 'andijan', nameUz: 'Andijon', nameRu: 'Андижан', nameEn: 'Andijan', lat: 40.7821, lng: 72.3442, districts: ['Boburshoh', 'Mustaqillik', 'New City'] },
-  { id: 'namangan', nameUz: 'Namangan', nameRu: 'Наманган', nameEn: 'Namangan', lat: 40.9983, lng: 71.6726, districts: ['Davlatobod', 'Chorsu', 'Yangi Namangan'] },
-  { id: 'fergana', nameUz: 'Fargʻona', nameRu: 'Фергана', nameEn: 'Fergana', lat: 40.3842, lng: 71.7843, districts: ['Margilan', 'Kokand Road', 'Al-Fergani'] },
-  { id: 'nukus', nameUz: 'Nukus', nameRu: 'Нукус', nameEn: 'Nukus', lat: 42.4619, lng: 59.6166, districts: ['Karakalpakstan Center', 'Doslik'] },
+  { id: 'andijan', nameUz: 'Andijon', nameRu: 'Андижан', nameEn: 'Andijan', lat: 40.7821, lng: 72.3442, districts: ['Boburshoh', 'Mustaqillik', 'New City', 'Asaka'] },
+  { id: 'namangan', nameUz: 'Namangan', nameRu: 'Наманган', nameEn: 'Namangan', lat: 40.9983, lng: 71.6726, districts: ['Davlatobod', 'Chorsu', 'Yangi Namangan', 'Pop'] },
+  { id: 'urgench', nameUz: 'Urganch (Xorazm)', nameRu: 'Ургенч (Хорезм)', nameEn: 'Urgench (Khorezm)', lat: 41.5562, lng: 60.6317, districts: ['Markaz', 'Xiva Yoʻli', 'Shovot'] },
+  { id: 'nukus', nameUz: 'Nukus (Qoraqalpogʻiston)', nameRu: 'Нукус (Каракалпакстан)', nameEn: 'Nukus (Karakalpakstan)', lat: 42.4619, lng: 59.6166, districts: ['Markaz', 'Doslik', 'Allayar'] },
+  { id: 'karshi', nameUz: 'Qarshi (Qashqadaryo)', nameRu: 'Карши (Кашкадарья)', nameEn: 'Karshi (Kashkadarya)', lat: 38.8606, lng: 65.7891, districts: ['Nasaf', 'Markaziy', 'Batosh'] },
+  { id: 'termez', nameUz: 'Termiz (Surxondaryo)', nameRu: 'Термез (Сурхандарья)', nameEn: 'Termez (Surkhandarya)', lat: 37.2286, lng: 67.2783, districts: ['Amudaryo soheli', 'Markaz', 'Al-Hakim'] },
+  { id: 'navoi', nameUz: 'Navoiy', nameRu: 'Навои', nameEn: 'Navoi', lat: 40.0989, lng: 65.3792, districts: ['Zarafshon shoh', 'Markaziy', 'Karmana'] },
+  { id: 'jizzakh', nameUz: 'Jizzax', nameRu: 'Джизак', nameEn: 'Jizzakh', lat: 40.1158, lng: 67.8422, districts: ['Sayiljoyi', 'Zomin yoʻli', 'Markaz'] },
+  { id: 'gulistan', nameUz: 'Guliston (Sirdaryo)', nameRu: 'Гулистан (Сырдарья)', nameEn: 'Gulistan (Syrdarya)', lat: 40.4897, lng: 68.7842, districts: ['Markaziy', 'Dehqonobod', 'Sayxun'] },
 ];
 
 export const LOYALTY_TIERS = [

@@ -40,3 +40,4 @@ console.log('SAVDOX serverlari:');
 console.log(`- Web:    ${webUrl}`);
 console.log(`- Mobile: ${expoUrl}`);
 console.log('============================================================\n');
+

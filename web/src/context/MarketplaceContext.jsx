@@ -97,9 +97,13 @@ export function MarketplaceProvider({ children }) {
   const [categories, setCategories] = useState(() =>
     loadFromStorage(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES)
   );
-  const [products, setProducts] = useState(() =>
-    loadFromStorage(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS)
-  );
+  const [products, setProducts] = useState(() => {
+    const cached = loadFromStorage(STORAGE_KEYS.PRODUCTS, null);
+    if (!cached || cached.length < INITIAL_PRODUCTS.length) {
+      return INITIAL_PRODUCTS;
+    }
+    return cached;
+  });
   const [stores, setStores] = useState(() =>
     loadFromStorage(STORAGE_KEYS.STORES, FEATURED_STORES)
   );

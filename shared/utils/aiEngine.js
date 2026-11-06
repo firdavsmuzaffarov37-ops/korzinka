@@ -32,7 +32,7 @@ export function extractBudgetUzs(text) {
   if (!text) return null;
   const normalized = text.toLowerCase();
 
-  // Check for "X.X million" or "X.Xm"
+  // Check for "X.X million" or "X.X mln" or "X million"
   const millionMatch = normalized.match(/(\d+(?:[.,]\d+)?)\s*(?:million|mln|млн|m\b)/i);
   if (millionMatch) {
     const val = parseFloat(millionMatch[1].replace(',', '.'));
@@ -41,12 +41,21 @@ export function extractBudgetUzs(text) {
     }
   }
 
-  // Check for explicit large numbers like 2,500,000 or 2500000 or 2 500 000
-  const numberMatches = text.match(/\b\d{1,3}(?:[,\s.]\d{3})+\b|\b\d{5,9}\b/g);
+  // Check for "X ming" or "Xk" (e.g. 600 ming, 800k)
+  const thousandMatch = normalized.match(/(\d+(?:[.,]\d+)?)\s*(?:ming|тыс|тысяч|k\b)/i);
+  if (thousandMatch) {
+    const val = parseFloat(thousandMatch[1].replace(',', '.'));
+    if (!isNaN(val) && val > 0) {
+      return Math.round(val * 1000);
+    }
+  }
+
+  // Check for explicit large numbers like 3500000, 3 500 000, 3,500,000 or attached to words (3500000som)
+  const numberMatches = text.match(/\b\d{1,3}(?:[,\s.]\d{3})+\b|\d{5,9}/g);
   if (numberMatches && numberMatches.length > 0) {
     const cleaned = numberMatches
       .map((n) => parseInt(n.replace(/[,\s.]/g, ''), 10))
-      .filter((n) => !isNaN(n) && n >= 50000);
+      .filter((n) => !isNaN(n) && n >= 30000);
     if (cleaned.length > 0) {
       return Math.max(...cleaned);
     }
@@ -113,12 +122,27 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
     }
   }
 
-  // Sort by rating and popularity
-  const withinBudget = budgetUzs
-    ? candidates.filter((p) => p.priceUzs <= budgetUzs).sort((a, b) => b.rating - a.rating)
-    : [...candidates].sort((a, b) => b.rating - a.rating);
+  // Sort candidates by closeness to user's specified budget
+  let recommended = [];
+  let withinBudget = [];
 
-  const recommended = withinBudget.length > 0 ? withinBudget.slice(0, 4) : candidates.slice(0, 3);
+  if (budgetUzs) {
+    // Sort by smallest distance to the requested budget (closest price appears first)
+    const sortedByBudgetCloseness = [...candidates].sort((a, b) => {
+      const diffA = Math.abs(a.priceUzs - budgetUzs);
+      const diffB = Math.abs(b.priceUzs - budgetUzs);
+      if (Math.abs(diffA - diffB) < budgetUzs * 0.08) {
+        return b.rating - a.rating;
+      }
+      return diffA - diffB;
+    });
+
+    withinBudget = sortedByBudgetCloseness.filter((p) => p.priceUzs <= budgetUzs * 1.05);
+    recommended = withinBudget.length > 0 ? withinBudget.slice(0, 4) : sortedByBudgetCloseness.slice(0, 4);
+  } else {
+    withinBudget = [...candidates];
+    recommended = [...candidates].sort((a, b) => b.rating - a.rating).slice(0, 4);
+  }
 
   // Find cheapest alternative in the same category
   const cheapestAlternative = [...candidates].sort((a, b) => a.priceUzs - b.priceUzs)[0] || null;
@@ -161,19 +185,31 @@ export function runAiShoppingAssistant({ prompt, products = [], lang = 'en' }) {
 
   // Generate structured, factual explanation in UZ / RU / EN
   let summaryText = '';
-  if (budgetUzs && withinBudget.length > 0) {
+  if (budgetUzs && recommended.length > 0) {
     const topPick = recommended[0];
     const topTitle = getLocalizedTitle(topPick, lang);
     const budgetFormatted = formatUzs(budgetUzs, lang);
     const topPriceFormatted = formatUzs(topPick.priceUzs, lang);
-    const savedFromBudget = formatUzs(budgetUzs - topPick.priceUzs, lang);
+    const priceDiff = budgetUzs - topPick.priceUzs;
 
     if (lang === 'uz') {
-      summaryText = `Siz koʻrsatgan **${budgetFormatted}** byudjet boʻyicha omborda mavjud **${withinBudget.length} ta tasdiqlangan mahsulot** topildi.\n\n• **Eng yaxshi tavsiya:** **${topTitle}** — **${topPriceFormatted}** (**${topPick.sellerName}**, Reyting: ★ ${topPick.rating}, Omborda: ${topPick.stock} dona). Byudjetingizdan **${savedFromBudget}** tejab qolasiz!\n• **Arzonroq muqobil variant:** **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% chegirma).`;
+      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.1
+        ? `Byudjetingizga deyarli 100% aniq toʻgʻri keladi!`
+        : priceDiff > 0
+        ? `Byudjetingizdan ${formatUzs(priceDiff, lang)} tejab qolasiz!`
+        : `Byudjetdan bor-yoʻgʻi ${formatUzs(Math.abs(priceDiff), lang)} yuqori`;
+
+      summaryText = `Siz kiritgan **${budgetFormatted}** summasiga eng mos keluvchi tasdiqlangan mahsulotlar tanlandi:\n\n• **Eng mos tavsiya:** **${topTitle}** — **${topPriceFormatted}** (${matchComment}, **${topPick.sellerName}**, Reyting: ★ ${topPick.rating})\n• **Arzonroq muqobil variant:** **${getLocalizedTitle(cheapestAlternative, lang)}** — **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% chegirma).`;
     } else if (lang === 'ru') {
-      summaryText = `По вашему бюджету **${budgetFormatted}** найдено **${withinBudget.length} проверенных товаров** в наличии.\n\n• **Лучшая рекомендация:** **${topTitle}** за **${topPriceFormatted}** от **${topPick.sellerName}** (Рейтинг: ★ ${topPick.rating}, В наличии: ${topPick.stock} шт.). Экономия от бюджета: **${savedFromBudget}**!\n• **Более доступный вариант:** **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative.priceUzs, lang)}** (скидка ${cheapestAlternative.discountPercent}%).`;
+      const matchComment = Math.abs(priceDiff) <= budgetUzs * 0.1
+        ? `практически 100% совпадение с бюджетом!`
+        : priceDiff > 0
+        ? `экономия от бюджета ${formatUzs(priceDiff, lang)}`
+        : `всего на ${formatUzs(Math.abs(priceDiff), lang)} выше бюджета`;
+
+      summaryText = `По вашему запросу на **${budgetFormatted}** подобраны товары максимально близкие к указанной сумме:\n\n• **Лучшее совпадение:** **${topTitle}** за **${topPriceFormatted}** (${matchComment}, продавец **${topPick.sellerName}**, Рейтинг: ★ ${topPick.rating})\n• **Более доступный вариант:** **${getLocalizedTitle(cheapestAlternative, lang)}** за **${formatUzs(cheapestAlternative.priceUzs, lang)}** (скидка ${cheapestAlternative.discountPercent}%).`;
     } else {
-      summaryText = `Based on your budget of **${budgetFormatted}**, I found **${withinBudget.length} verified marketplace products** in stock right now.\n\n• **Top Recommendation:** **${topTitle}** at **${topPriceFormatted}** from **${topPick.sellerName}** (Rating: ★ ${topPick.rating}, Stock: ${topPick.stock} units). This leaves you with **${savedFromBudget}** under your budget!\n• **Cheaper Alternative:** **${getLocalizedTitle(cheapestAlternative, lang)}** is available for **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% OFF).`;
+      summaryText = `Based on your budget of **${budgetFormatted}**, I matched products closest to this exact price point:\n\n• **Closest Match:** **${topTitle}** at **${topPriceFormatted}** (**${topPick.sellerName}**, Rating: ★ ${topPick.rating})\n• **Cheaper Alternative:** **${getLocalizedTitle(cheapestAlternative, lang)}** is available for **${formatUzs(cheapestAlternative.priceUzs, lang)}** (${cheapestAlternative.discountPercent}% OFF).`;
     }
   } else if (budgetUzs && withinBudget.length === 0) {
     if (lang === 'uz') {
