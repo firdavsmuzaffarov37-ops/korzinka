@@ -60,11 +60,10 @@ export default function ProductCard({ product }) {
               toggleFavorite(product.id);
             }}
             aria-label="Toggle favorite"
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${
-              isFavorite
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${isFavorite
                 ? 'bg-rose-50 text-rose-600 border border-rose-200'
                 : 'bg-white/90 text-slate-600 hover:text-rose-600 hover:bg-white'
-            }`}
+              }`}
           >
             <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
           </button>
@@ -76,11 +75,10 @@ export default function ProductCard({ product }) {
               toggleCompare(product);
             }}
             title={isCompared ? 'Solishtirishdan chiqarish' : 'Solishtirish'}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${
-              isCompared
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${isCompared
                 ? 'bg-emerald-600 text-white shadow-md'
                 : 'bg-white/90 text-slate-600 hover:text-emerald-700 hover:bg-white'
-            }`}
+              }`}
           >
             <ArrowLeftRight className="w-3.5 h-3.5" />
           </button>
@@ -135,11 +133,10 @@ export default function ProductCard({ product }) {
           <button
             type="button"
             onClick={() => addToCart(product)}
-            className={`w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm ${
-              inCartCount > 0
+            className={`w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-sm ${inCartCount > 0
                 ? 'bg-emerald-900 text-white hover:bg-emerald-800'
                 : 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-95'
-            }`}
+              }`}
           >
             {inCartCount > 0 ? (
               <>

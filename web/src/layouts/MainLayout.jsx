@@ -206,7 +206,7 @@ export default function MainLayout() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50/60 text-slate-900 pb-16 lg:pb-0 overflow-x-hidden w-full max-w-full">
+    <div className="min-h-screen flex flex-col bg-slate-50/60 text-slate-900 pb-16 md:pb-0 overflow-x-hidden w-full max-w-full">
       {/* Main Clean White Sticky Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm w-full max-w-full">
         {/* MOBILE VIEW (< md) */}
@@ -301,8 +301,8 @@ export default function MainLayout() {
               </div>
             </Link>
 
-            {/* Clean City Dropdown inside Main Header */}
-            <div className="hidden xl:flex items-center gap-1 bg-slate-100 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs shrink-0">
+            {/* Clean City Dropdown inside Main Header - Visible on Notebooks & Desktop */}
+            <div className="hidden lg:flex items-center gap-1 bg-slate-100 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs shrink-0">
               <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <select
                 aria-label={t.deliverTo}
@@ -311,7 +311,7 @@ export default function MainLayout() {
                   const found = UZBEKISTAN_CITIES.find((c) => c.id === e.target.value);
                   if (found) setSelectedCity(found);
                 }}
-                className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer"
+                className="bg-transparent text-slate-800 font-bold focus:outline-none cursor-pointer max-w-[110px] truncate"
               >
                 {UZBEKISTAN_CITIES.map((city) => (
                   <option key={city.id} value={city.id}>
@@ -322,16 +322,16 @@ export default function MainLayout() {
             </div>
           </div>
 
-          {/* All Categories Button */}
+          {/* All Categories Button - Visible on Notebooks & Desktop */}
           <Link
             to="/catalog"
-            className="hidden xl:inline-flex items-center gap-2 px-3 py-2 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition shrink-0"
+            className="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-200 transition shrink-0"
           >
             <LayoutGrid className="w-4 h-4 text-emerald-600" />
             <span>{t.categories}</span>
           </Link>
 
-          {/* Smart Search Bar on Desktop */}
+          {/* Smart Search Bar on Desktop & Notebooks */}
           {renderSearchForm(false)}
 
           {/* Glassmorphic AI Assistant Button */}
@@ -341,8 +341,8 @@ export default function MainLayout() {
             className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white text-xs font-extrabold shadow-md hover:shadow-emerald-glow transition shrink-0"
           >
             <Sparkles className="w-4 h-4 text-emerald-200 animate-pulse" />
-            <span className="hidden 2xl:inline">{t.aiAssistant}</span>
-            <span className="2xl:hidden">{t.aiShort}</span>
+            <span className="hidden xl:inline">{t.aiAssistant}</span>
+            <span className="xl:hidden">{t.aiShort}</span>
           </button>
 
           {/* Language Switcher: UZ | RU | EN */}
@@ -376,8 +376,8 @@ export default function MainLayout() {
             </span>
           </button>
 
-          {/* Action Icons: Notifications, Track, Compare, Favorites, Cart + Dedicated Login & Register Buttons */}
-          <div className="hidden lg:flex items-center gap-1 shrink-0">
+          {/* Action Icons: Always accessible on Notebooks & Desktop */}
+          <div className="flex items-center gap-1 shrink-0">
             {/* Live Notification Center Dropdown */}
             <NotificationDropdown lang={lang} />
 
@@ -569,8 +569,8 @@ export default function MainLayout() {
       {/* AI Shopping Assistant Modal */}
       <AiShoppingAssistantModal />
 
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg">
+      {/* Mobile Bottom Navigation Bar - Only on Phones (< md), Hidden on Notebooks */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg">
         <NavLink
           to="/"
           end
