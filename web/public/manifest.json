@@ -1,0 +1,23 @@
+{
+  "name": "SAVDOX — Oʻzbekiston Milliy Marketpleysi",
+  "short_name": "SAVDOX",
+  "description": "Oʻzbekiston boʻylab tezkor yetkazib berish bilan eng katta milliy savdo maydoni",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/savdox-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/savdox-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   MapPin,
@@ -18,11 +18,15 @@ import {
   LogIn,
   UserPlus,
   X,
+  ArrowLeftRight,
+  Download,
+  Smartphone,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { UZBEKISTAN_CITIES } from '@shared/types';
 import { formatUzs, getLocalizedTitle } from '@shared/utils/formatters';
 import AiShoppingAssistantModal from '../components/AiShoppingAssistantModal';
+import NotificationDropdown from '../components/NotificationDropdown';
 
 export default function MainLayout() {
   const {
@@ -36,6 +40,7 @@ export default function MainLayout() {
     products,
     cart,
     favorites,
+    compareList = [],
     bonusWallet,
     searchHistory,
     setSearchHistory,
@@ -46,6 +51,32 @@ export default function MainLayout() {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      setDeferredPrompt(null);
+    } else {
+      alert(
+        lang === 'uz'
+          ? "SAVDOX PWA Ilovasi: Brauzer menyusidan 'Bosh ekranga qo‘shish' (Add to Home screen) tugmasini bosing!"
+          : lang === 'ru'
+          ? "Приложение SAVDOX: Нажмите в меню браузера 'Установить на главный экран'!"
+          : "SAVDOX PWA: Tap 'Add to Home Screen' from your browser menu!"
+      );
+    }
+  };
 
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -253,8 +284,24 @@ export default function MainLayout() {
             ))}
           </div>
 
-          {/* Action Icons: Track, Favorites, Cart + Dedicated Login & Register Buttons */}
+          {/* PWA Install Button */}
+          <button
+            type="button"
+            onClick={handleInstallApp}
+            title={lang === 'uz' ? "SAVDOX ilovasini o'rnatish" : lang === 'ru' ? "Установить приложение SAVDOX" : "Install SAVDOX App"}
+            className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 text-xs font-bold border border-slate-200 transition shrink-0"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden xl:inline">
+              {lang === 'uz' ? "Ilova" : lang === 'ru' ? "Приложение" : "App"}
+            </span>
+          </button>
+
+          {/* Action Icons: Notifications, Track, Compare, Favorites, Cart + Dedicated Login & Register Buttons */}
           <div className="hidden lg:flex items-center gap-1.5 shrink-0">
+            {/* Live Notification Center Dropdown */}
+            <NotificationDropdown lang={lang} />
+
             <NavLink
               to="/orders"
               className={({ isActive }) =>
@@ -265,6 +312,26 @@ export default function MainLayout() {
             >
               <Truck className="w-4 h-4" />
               <span className="text-[10px] mt-0.5">{t.trackShort}</span>
+            </NavLink>
+
+            {/* Compare Matrix Route */}
+            <NavLink
+              to="/compare"
+              className={({ isActive }) =>
+                `relative flex flex-col items-center px-2 py-1.5 rounded-xl text-xs font-semibold transition ${
+                  isActive ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-emerald-700'
+                }`
+              }
+            >
+              <ArrowLeftRight className="w-4 h-4" />
+              <span className="text-[10px] mt-0.5">
+                {lang === 'uz' ? 'Taqqos' : lang === 'ru' ? 'Сравнить' : 'Compare'}
+              </span>
+              {compareList.length > 0 && (
+                <span className="absolute top-0.5 right-1.5 w-4 h-4 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold flex items-center justify-center animate-pulse">
+                  {compareList.length}
+                </span>
+              )}
             </NavLink>
 
             <NavLink
@@ -375,6 +442,31 @@ export default function MainLayout() {
           </div>
         </div>
       </header>
+
+      {/* Floating Compare Bar */}
+      {compareList.length > 0 && (
+        <aside
+          aria-label={lang === 'uz' ? "Mahsulotlarni taqqoslash paneli" : lang === 'ru' ? "Панель сравнения товаров" : "Product comparison drawer"}
+          className="fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-40 bg-slate-900/95 backdrop-blur-md text-white px-5 py-2.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3"
+        >
+          <div className="flex items-center gap-2">
+            <ArrowLeftRight className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs font-bold">
+              {lang === 'uz'
+                ? `${compareList.length} ta mahsulot taqqosda`
+                : lang === 'ru'
+                ? `${compareList.length} товара в сравнении`
+                : `${compareList.length} in compare`}
+            </span>
+          </div>
+          <Link
+            to="/compare"
+            className="px-3 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold transition shadow-sm"
+          >
+            {lang === 'uz' ? "Koʻrish →" : lang === 'ru' ? "Смотреть →" : "View →"}
+          </Link>
+        </aside>
+      )}
 
       {/* Toast Notification Banner */}
       {toast && (

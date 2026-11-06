@@ -1606,3 +1606,4 @@ export const EXPANDED_PRODUCTS = [
     approvalStatus: 'approved',
   },
 ];
+

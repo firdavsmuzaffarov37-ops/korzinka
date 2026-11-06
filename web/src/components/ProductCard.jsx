@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, ShoppingCart, Star, Store, Zap, Check } from 'lucide-react';
+import { Heart, ShoppingCart, Star, Store, Zap, Check, ArrowLeftRight } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { formatUzs, getLocalizedTitle, calculateInstallmentUzs } from '@shared/utils/formatters';
 
 export default function ProductCard({ product }) {
-  const { lang, t, favorites, toggleFavorite, addToCart, cart } = useMarketplace();
+  const { lang, t, favorites, toggleFavorite, addToCart, cart, toggleCompare, isInCompare } = useMarketplace();
   if (!product) return null;
 
   const isFavorite = favorites.includes(product.id);
+  const isCompared = isInCompare(product.id);
   const inCartCount = cart
     .filter((item) => item.productId === product.id)
     .reduce((sum, item) => sum + item.quantity, 0);
@@ -50,22 +51,40 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Favorite Button */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            toggleFavorite(product.id);
-          }}
-          aria-label="Toggle favorite"
-          className={`absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-sm ${
-            isFavorite
-              ? 'bg-rose-50 text-rose-600 border border-rose-200'
-              : 'bg-white/90 text-slate-600 hover:text-rose-600 hover:bg-white'
-          }`}
-        >
-          <Heart className={`w-4 h-4 ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
-        </button>
+        {/* Favorite & Compare Action Buttons */}
+        <div className="absolute top-2.5 right-2.5 flex flex-col gap-1.5 z-10">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              toggleFavorite(product.id);
+            }}
+            aria-label="Toggle favorite"
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${
+              isFavorite
+                ? 'bg-rose-50 text-rose-600 border border-rose-200'
+                : 'bg-white/90 text-slate-600 hover:text-rose-600 hover:bg-white'
+            }`}
+          >
+            <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              toggleCompare(product);
+            }}
+            title={isCompared ? 'Solishtirishdan chiqarish' : 'Solishtirish'}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${
+              isCompared
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'bg-white/90 text-slate-600 hover:text-emerald-700 hover:bg-white'
+            }`}
+          >
+            <ArrowLeftRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Content */}

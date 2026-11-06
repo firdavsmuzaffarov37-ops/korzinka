@@ -10,12 +10,14 @@ import {
   ShieldCheck,
   AlertCircle,
   Star,
+  FileText,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import { ORDER_STATUSES } from '@shared/types';
 import { formatUzs } from '@shared/utils/formatters';
 import { TRANSLATIONS } from '@shared/constants/translations';
 import InteractiveMap from '../components/InteractiveMap';
+import OfficialTaxReceiptModal from '../components/OfficialTaxReceiptModal';
 
 export default function OrderTrackingPage() {
   const { orders, updateOrderStatus, lang, showToast } = useMarketplace();
@@ -29,6 +31,7 @@ export default function OrderTrackingPage() {
       orders[0]?.id ||
       ''
   );
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
 
   const activeOrder =
     orders.find((o) => o.id === selectedOrderId || o.orderNumber === requestedOrderNum) ||
@@ -297,6 +300,24 @@ export default function OrderTrackingPage() {
                   {formatUzs(activeOrder.totalUzs, lang)}
                 </span>
               </div>
+
+              {/* View Official Tax Receipt Button */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowReceiptModal(true)}
+                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold inline-flex items-center justify-center gap-2 shadow-sm transition"
+                >
+                  <FileText className="w-4 h-4 text-emerald-400" />
+                  <span>
+                    {lang === 'uz'
+                      ? 'Elektron Fiskal Chekni koʻrish / Yuklab olish'
+                      : lang === 'ru'
+                      ? 'Посмотреть / Скачать фискальный чек'
+                      : 'View / Download Official Fiscal Receipt'}
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -336,6 +357,14 @@ export default function OrderTrackingPage() {
           </div>
         </div>
       </div>
+
+      {/* Official Tax Electronic Receipt Modal */}
+      <OfficialTaxReceiptModal
+        isOpen={showReceiptModal}
+        onClose={() => setShowReceiptModal(false)}
+        order={activeOrder}
+        lang={lang}
+      />
     </div>
   );
 }

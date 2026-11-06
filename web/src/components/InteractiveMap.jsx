@@ -396,7 +396,9 @@ export default function InteractiveMap({
         <div className="absolute top-3 left-3 px-3 py-1.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-emerald-500/40 text-xs font-bold text-white flex items-center gap-2 shadow-lg z-10">
           <Navigation className="w-3.5 h-3.5 text-emerald-400 animate-spin-slow" />
           <span>
-            {mapView === 'country' ? 'Oʻzbekiston Respublikasi' : activeCityObj.nameUz} • GPS Faol
+            {mapView === 'country'
+              ? (lang === 'uz' ? 'Oʻzbekiston Respublikasi' : lang === 'ru' ? 'Республика Узбекистан' : 'Republic of Uzbekistan')
+              : (lang === 'uz' ? activeCityObj.nameUz : lang === 'ru' ? activeCityObj.nameRu : activeCityObj.nameEn)} • {lang === 'uz' ? 'GPS Faol' : lang === 'ru' ? 'GPS Активен' : 'GPS Active'}
           </span>
         </div>
 
@@ -407,7 +409,11 @@ export default function InteractiveMap({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span>{isMoving ? 'GPS Harakatda' : 'GPS Aloqada'}</span>
+            <span>
+              {isMoving
+                ? (lang === 'uz' ? 'GPS Harakatda' : lang === 'ru' ? 'GPS в пути' : 'GPS Moving')
+                : (lang === 'uz' ? 'GPS Aloqada' : lang === 'ru' ? 'GPS на связи' : 'GPS Connected')}
+            </span>
           </div>
 
           {mode === 'tracking' && isMoving && (
@@ -435,10 +441,14 @@ export default function InteractiveMap({
           {mode === 'tracking' && isMoving && (
             <div className="text-slate-300 flex items-center gap-2">
               <span>•</span>
-              <span className="text-amber-300 font-bold">{remainingKm} km qoldi</span>
-              <span>(~{remainingMins} daqiqa)</span>
+              <span className="text-amber-300 font-bold">
+                {remainingKm} {lang === 'uz' ? 'km qoldi' : lang === 'ru' ? 'км осталось' : 'km left'}
+              </span>
+              <span>(~{remainingMins} {lang === 'uz' ? 'daqiqa' : lang === 'ru' ? 'мин' : 'mins'})</span>
               <span>•</span>
-              <span className="text-emerald-300">Tezlik: {mapView === 'country' ? '74 km/soat' : '42 km/soat'}</span>
+              <span className="text-emerald-300">
+                {lang === 'uz' ? 'Tezlik' : lang === 'ru' ? 'Скорость' : 'Speed'}: {mapView === 'country' ? '74 km/soat' : '42 km/soat'}
+              </span>
             </div>
           )}
         </div>
@@ -569,7 +579,7 @@ export default function InteractiveMap({
                   <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping"></span>
                   <span>
                     {orderStatus === 'Delivered'
-                      ? 'Yetkazildi ✓'
+                      ? (lang === 'uz' ? 'Yetkazildi ✓' : lang === 'ru' ? 'Доставлено ✓' : 'Delivered ✓')
                       : `Cobalt: ${remainingKm} km (${currentCourierLat.toString().slice(-4)}, ${currentCourierLng.toString().slice(-4)})`}
                   </span>
                 </div>

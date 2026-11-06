@@ -11,6 +11,7 @@ import OrderTrackingPage from './pages/OrderTrackingPage';
 import SellerDashboardPage from './pages/SellerDashboardPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import SavdoxBonusPage from './pages/SavdoxBonusPage';
+import ComparePage from './pages/ComparePage';
 import AuthPage from './pages/AuthPage';
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="seller" element={<SellerDashboardPage />} />
             <Route path="admin" element={<AdminDashboardPage />} />
             <Route path="bonus" element={<SavdoxBonusPage />} />
+            <Route path="compare" element={<ComparePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

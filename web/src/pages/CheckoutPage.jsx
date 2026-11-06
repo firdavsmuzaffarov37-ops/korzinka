@@ -15,6 +15,7 @@ import { DELIVERY_METHODS, PAYMENT_PROVIDERS, UZBEKISTAN_CITIES } from '@shared/
 import { formatUzs } from '@shared/utils/formatters';
 import InteractiveMap from '../components/InteractiveMap';
 import { initiatePaymentSession } from '../services/paymentService';
+import PaymentModal from '../components/PaymentModal';
 
 const TIME_SLOTS = [
   'ASAP (Within 60 - 90 mins)',
@@ -52,6 +53,7 @@ export default function CheckoutPage() {
   const [customerNotes, setCustomerNotes] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [gatewaySessionInfo, setGatewaySessionInfo] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const selectedDeliveryObj =
     DELIVERY_METHODS.find((m) => m.id === deliveryMethodId) || DELIVERY_METHODS[0];
@@ -85,18 +87,7 @@ export default function CheckoutPage() {
     );
   }
 
-  const handleCompleteCheckout = async (e) => {
-    e.preventDefault();
-    setIsProcessing(true);
-
-    const tempOrderRef = `SVX-${Date.now().toString().slice(-5)}`;
-    const session = await initiatePaymentSession({
-      orderId: tempOrderRef,
-      provider: paymentMethodId,
-      amountUzs: finalTotalUzs,
-    });
-    setGatewaySessionInfo(session);
-
+  const executeOrderCreation = (paidInfo = null) => {
     const createdOrder = createOrder({
       customerName,
       customerPhone,
@@ -108,15 +99,34 @@ export default function CheckoutPage() {
       deliveryMethod: deliveryMethodId,
       deliveryTimeSlot,
       deliveryFeeUzs,
-      paymentMethod: paymentMethodId,
+      paymentMethod: paidInfo?.provider || paymentMethodId,
+      paymentStatus: paidInfo ? 'paid' : paymentMethodId === 'cod' ? 'pending' : 'paid',
       useBonusPointsUzs: bonusPointsUzs,
       customerNotes,
     });
 
+    setIsProcessing(false);
+    setShowPaymentModal(false);
+    navigate(`/orders?order=${createdOrder.orderNumber}`);
+  };
+
+  const handleCompleteCheckout = async (e) => {
+    e.preventDefault();
+
+    // If online payment provider (Click, Payme, Uzum), open the interactive payment gateway modal
+    if (paymentMethodId !== 'cod') {
+      setShowPaymentModal(true);
+      return;
+    }
+
+    setIsProcessing(true);
     setTimeout(() => {
-      setIsProcessing(false);
-      navigate(`/orders?order=${createdOrder.orderNumber}`);
+      executeOrderCreation(null);
     }, 600);
+  };
+
+  const handlePaymentSuccess = (paidInfo) => {
+    executeOrderCreation(paidInfo);
   };
 
   const cityObj =
@@ -469,6 +479,17 @@ export default function CheckoutPage() {
           </div>
         </div>
       </form>
+
+      {/* Interactive Payment Gateway Simulation Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onSuccess={handlePaymentSuccess}
+        amountUzs={finalTotalUzs}
+        paymentMethod={paymentMethodId}
+        customerPhone={customerPhone}
+        lang={lang}
+      />
     </div>
   );
 }

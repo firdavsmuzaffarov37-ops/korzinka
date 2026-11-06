@@ -12,6 +12,7 @@ import {
   MessageSquare,
   ArrowLeft,
   Award,
+  ArrowLeftRight,
 } from 'lucide-react';
 import { useMarketplace } from '../context/MarketplaceContext';
 import ProductCard from '../components/ProductCard';
@@ -32,6 +33,8 @@ export default function ProductDetailsPage() {
     products,
     favorites,
     toggleFavorite,
+    toggleCompare,
+    isInCompare,
     addToCart,
     recordProductView,
     reviews,
@@ -303,6 +306,24 @@ export default function ProductDetailsPage() {
                 className="py-3.5 px-6 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-white text-sm font-extrabold transition"
               >
                 {t.buyNow}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => toggleCompare(product)}
+                title={lang === 'uz' ? 'Taqqoslashga qo‘shish' : lang === 'ru' ? 'Сравнить товар' : 'Compare product'}
+                className={`p-3.5 rounded-2xl border transition inline-flex items-center gap-1.5 ${
+                  isInCompare(product.id)
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-bold'
+                    : 'border-slate-200 hover:border-emerald-300 text-slate-600'
+                }`}
+              >
+                <ArrowLeftRight className="w-5 h-5" />
+                <span className="text-xs font-bold hidden sm:inline">
+                  {isInCompare(product.id)
+                    ? (lang === 'uz' ? 'Taqqosda' : lang === 'ru' ? 'В сравнении' : 'In Compare')
+                    : (lang === 'uz' ? 'Taqqoslash' : lang === 'ru' ? 'Сравнить' : 'Compare')}
+                </span>
               </button>
 
               <button

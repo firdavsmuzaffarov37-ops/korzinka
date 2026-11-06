@@ -15,6 +15,7 @@ import {
   supabaseUrl,
   checkSupabaseHealth,
 } from '../services/supabaseClient';
+import { sounds } from '../utils/soundEffects';
 
 const MarketplaceContext = createContext(null);
 
@@ -34,6 +35,7 @@ const STORAGE_KEYS = {
   BONUS: 'savdox_bonus_v1',
   SEARCH_HISTORY: 'savdox_search_history_v1',
   COMPLAINTS: 'savdox_complaints_v1',
+  COMPARE: 'savdox_compare_v1',
 };
 
 const DEFAULT_USER = {
@@ -128,6 +130,9 @@ export function MarketplaceProvider({ children }) {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [favorites, setFavorites] = useState(() =>
     loadFromStorage(STORAGE_KEYS.FAVORITES, ['prod-redmi-note-13', 'prod-dyson-airwrap-emerald'])
+  );
+  const [compareList, setCompareList] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.COMPARE, ['prod-redmi-note-13', 'prod-redmi-note-13-pro'])
   );
   const [recentlyViewed, setRecentlyViewed] = useState(() =>
     loadFromStorage(STORAGE_KEYS.RECENT, [
@@ -310,6 +315,7 @@ export function MarketplaceProvider({ children }) {
   useEffect(() => { localStorage.setItem(STORAGE_KEYS.STORES, JSON.stringify(stores)); }, [stores]);
   useEffect(() => { localStorage.setItem(STORAGE_KEYS.CART, JSON.stringify(cart)); }, [cart]);
   useEffect(() => { localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favorites)); }, [favorites]);
+  useEffect(() => { localStorage.setItem(STORAGE_KEYS.COMPARE, JSON.stringify(compareList)); }, [compareList]);
   useEffect(() => { localStorage.setItem(STORAGE_KEYS.RECENT, JSON.stringify(recentlyViewed)); }, [recentlyViewed]);
   useEffect(() => { localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders)); }, [orders]);
   useEffect(() => { localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(reviews)); }, [reviews]);
@@ -399,7 +405,36 @@ export function MarketplaceProvider({ children }) {
         : lang === 'ru'
         ? `"${prodTitle.slice(0, 24)}..." добавлен в корзину! 🛒`
         : `Added "${prodTitle.slice(0, 24)}..." to Cart! 🛒`;
+    sounds.playCartChime();
     showToast(toastMsg);
+  };
+
+  const toggleCompare = (product) => {
+    if (!product) return;
+    const prodId = typeof product === 'string' ? product : product.id;
+    setCompareList((prev) => {
+      const exists = prev.includes(prodId);
+      if (exists) {
+        sounds.playCompareChime();
+        showToast(lang === 'uz' ? 'Solishtirishdan olib tashlandi' : lang === 'ru' ? 'Удалено из сравнения' : 'Removed from comparison');
+        return prev.filter((id) => id !== prodId);
+      }
+      if (prev.length >= 4) {
+        showToast(lang === 'uz' ? 'Koʻpi bilan 4 ta mahsulotni solishtirish mumkin' : lang === 'ru' ? 'Можно сравнивать максимум 4 товара' : 'You can compare up to 4 products', 'info');
+        return prev;
+      }
+      sounds.playCompareChime();
+      showToast(lang === 'uz' ? 'Solishtirishga qoʻshildi ⚖️' : lang === 'ru' ? 'Добавлено в сравнение ⚖️' : 'Added to comparison ⚖️');
+      return [...prev, prodId];
+    });
+  };
+
+  const isInCompare = (productId) => {
+    return compareList.includes(productId);
+  };
+
+  const clearCompare = () => {
+    setCompareList([]);
   };
 
   const updateCartItemQuantity = (cartItemId, newQuantity) => {
@@ -581,6 +616,7 @@ export function MarketplaceProvider({ children }) {
     };
 
     setOrders((prev) => [newOrder, ...prev]);
+    sounds.playSuccessChime();
 
     const earnedPoints = Math.round((totalUzs * bonusWallet.cashbackPercent) / 100);
     setBonusWallet((prev) => {
@@ -873,6 +909,10 @@ export function MarketplaceProvider({ children }) {
     addCoupon,
     favorites,
     toggleFavorite,
+    compareList,
+    toggleCompare,
+    isInCompare,
+    clearCompare,
     recentlyViewed,
     recordProductView,
     orders,

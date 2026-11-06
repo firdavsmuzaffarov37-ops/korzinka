@@ -229,7 +229,7 @@ export default function CatalogPage() {
                     {getLocalizedTitle(cat, lang)}
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {cat.productCount}
+                    {cat.productCount} {t.itemsCount}
                   </div>
                 </div>
               </button>
@@ -312,7 +312,7 @@ export default function CatalogPage() {
               <option value="all">{t.allCategories}</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.slug}>
-                  {getLocalizedTitle(c, lang)} ({c.productCount})
+                  {getLocalizedTitle(c, lang)} ({c.productCount} {t.itemsCount})
                 </option>
               ))}
             </select>
