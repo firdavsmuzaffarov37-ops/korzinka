@@ -1087,53 +1087,6 @@ export const INITIAL_PRODUCTS = [
     approvalStatus: 'approved',
   },
 
-  // HEALTH
-  {
-    id: 'prod-omron-m3-comfort',
-    slug: 'omron-m3-comfort-automatic-blood-pressure-monitor-intellisense',
-    sku: 'SVX-HLT-001',
-    categoryId: 'cat-health',
-    categorySlug: 'health',
-    subcategory: 'Blood Pressure Monitors',
-    storeId: 'store-orient-home',
-    sellerName: 'Orient Home & Comfort',
-    sellerRating: 4.91,
-    brand: 'Omron',
-    nameUz: 'Avtomatik tonometr Omron M3 Comfort (Aqlli Intelli Wrap manjeti 22-42 sm)',
-    nameRu: 'Тонометр автоматический Omron M3 Comfort с умной манжетой Intelli Wrap и адаптером',
-    nameEn: 'Omron M3 Comfort Automatic Upper Arm Blood Pressure Monitor (360° Intelli Wrap)',
-    descriptionUz: 'Yaponiya texnologiyasi asosida 360 gradus aniqlikda qon bosimi va aritmiyani oʻlchovchi oilaviy tibbiy tonometr. 2 foydalanuvchi xotirasi va tarmoq adapteri bilan.',
-    descriptionRu: 'Клинически апробированный японский тонометр с каркасной манжетой 22-42 см, индикатором аритмии, памятью на 2 пользователей и сетевым адаптером в комплекте.',
-    descriptionEn: 'Clinically validated Japanese accuracy in any position around the upper arm. Features irregular heartbeat detection, dual-user 60-reading memory, and AC adapter.',
-    priceUzs: 740000,
-    oldPriceUzs: 890000,
-    discountPercent: 17,
-    rating: 4.98,
-    reviewCount: 340,
-    soldCount: 1640,
-    stock: 45,
-    images: [
-      'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=900&q=80',
-    ],
-    colors: [{ name: 'Medical White', hex: '#F8FAFC' }],
-    sizes: ['Universal Cuff (22-42 cm) + AC Adapter'],
-    specifications: {
-      Technology: 'Omron Intellisense & 360° Intelli Wrap Cuff',
-      Memory: '2 Users x 60 Readings + Guest Mode',
-      Power: '4x AA Batteries + Official AC Wall Adapter Included',
-      Warranty: '5 Years Official Warranty in Uzbekistan',
-    },
-    sellerOffers: [
-      { storeId: 'store-orient-home', sellerName: 'Orient Home & Comfort', priceUzs: 740000, deliveryEta: '90 mins Pharmacy Express', rating: 4.91, warranty: '5 Years Official' },
-    ],
-    visualTags: ['health', 'medical', 'wellness'],
-    isFlashSale: false,
-    isPopular: true,
-    isBestSeller: true,
-    isRecommended: true,
-    approvalStatus: 'approved',
-  },
-
   // BABY PRODUCTS
   {
     id: 'prod-cybex-balios-stroller',

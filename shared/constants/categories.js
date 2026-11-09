@@ -1,5 +1,5 @@
 /**
- * SAVDOX 16 Official Marketplace Categories
+ * SAVDOX 14 Official Marketplace Categories
  * Each category includes localized titles (UZ/RU/EN), high-res imagery, localized subcategories, product counts, and custom filter facets.
  */
 
@@ -195,22 +195,6 @@ export const CATEGORIES = [
     filterOptions: ['Book Language (UZ/RU/EN)', 'Cover Type (Hardcover/Paperback)', 'Genre', 'Publisher', 'Publication Year'],
     filterOptionsUz: ['Kitob tili (UZ/RU/EN)', 'Muqova turi (Qattiq/Yumshoq)', 'Janr', 'Nashriyot', 'Nashr yili'],
     filterOptionsRu: ['Язык книги (UZ/RU/EN)', 'Обложка (Твердая/Мягкая)', 'Жанр', 'Издательство', 'Год издания'],
-  },
-  {
-    id: 'cat-health',
-    slug: 'health',
-    nameUz: 'Salomatlik',
-    nameRu: 'Здоровье и аптека',
-    nameEn: 'Health',
-    icon: 'HeartPulse',
-    image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80',
-    productCount: 3,
-    subcategories: ['Vitamins & Supplements', 'Blood Pressure Monitors', 'Massage Guns & Wellness', 'Orthopedic Support', 'Optical & Eyewear'],
-    subcategoriesUz: ['Vitaminlar va BAA', 'Qon bosimini oʻlchagichlar (Tonometr)', 'Massajyorlar va relaks', 'Ortopedik vositalar', 'Optika va koʻzoynaklar'],
-    subcategoriesRu: ['Витамины и БАДы', 'Тонометры и измерение давления', 'Массажеры и релакс', 'Ортопедические изделия', 'Оптика и очки'],
-    filterOptions: ['Certification', 'Form Factor', 'Digital Smart Sync', 'Brand', 'Origin'],
-    filterOptionsUz: ['Sertifikat', 'Shakli', 'Smart sinxronizatsiya', 'Brend'],
-    filterOptionsRu: ['Сертификация', 'Форма выпуска', 'Смарт синхронизация', 'Бренд'],
   },
   {
     id: 'cat-baby',

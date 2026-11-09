@@ -101,7 +101,7 @@ export function MarketplaceProvider({ children }) {
     if (
       !cached ||
       cached.length !== INITIAL_CATEGORIES.length ||
-      cached.some((c) => c.slug === 'automotive') ||
+      cached.some((c) => c.slug === 'automotive' || c.slug === 'health') ||
       !cached[0]?.subcategoriesUz
     ) {
       return INITIAL_CATEGORIES;
@@ -112,7 +112,13 @@ export function MarketplaceProvider({ children }) {
     const cached = loadFromStorage(STORAGE_KEYS.PRODUCTS, null);
     if (
       !cached ||
-      cached.some((p) => p.categoryId === 'cat-automotive' || p.categorySlug === 'automotive') ||
+      cached.some(
+        (p) =>
+          p.categoryId === 'cat-automotive' ||
+          p.categorySlug === 'automotive' ||
+          p.categoryId === 'cat-health' ||
+          p.categorySlug === 'health'
+      ) ||
       cached.length !== INITIAL_PRODUCTS.length
     ) {
       return INITIAL_PRODUCTS;
