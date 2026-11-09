@@ -26,7 +26,7 @@ const STORAGE_KEYS = {
   CART: 'savdox_cart_v1',
   FAVORITES: 'savdox_favs_v1',
   RECENT: 'savdox_recent_v1',
-  PRODUCTS: 'savdox_products_v1',
+  PRODUCTS: 'savdox_products_v2',
   CATEGORIES: 'savdox_categories_v1',
   STORES: 'savdox_stores_v1',
   ORDERS: 'savdox_orders_v1',
