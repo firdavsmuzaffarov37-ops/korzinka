@@ -12,6 +12,7 @@ import {
   LogIn,
   UserPlus,
   ArrowLeft,
+  ArrowRight,
   ShoppingCart,
   Eye,
   EyeOff,
@@ -19,7 +20,7 @@ import {
   Zap,
   Globe,
 } from 'lucide-react';
-import { useMarketplace } from '../context/MarketplaceContext';
+import { useMarketplace, DEFAULT_USER } from '../context/MarketplaceContext';
 import { UZBEKISTAN_CITIES } from '@shared/types';
 import { formatUzs } from '@shared/utils/formatters';
 
@@ -93,9 +94,9 @@ export default function AuthPage({ defaultMode = 'login' }) {
           });
           if (!error) {
             setUser((prev) => ({
-              ...prev,
+              ...(prev || DEFAULT_USER),
               email,
-              fullName: fullName || prev.fullName,
+              fullName: fullName || prev?.fullName || DEFAULT_USER.fullName,
               isVerified: true,
             }));
             showToast(
@@ -127,6 +128,40 @@ export default function AuthPage({ defaultMode = 'login' }) {
     }
   };
 
+  const handleDemoLogin = () => {
+    setUser(DEFAULT_USER);
+    showToast(
+      lang === 'uz'
+        ? `Xush kelibsiz, ${DEFAULT_USER.fullName}!`
+        : lang === 'ru'
+        ? `Добро пожаловать, ${DEFAULT_USER.fullName}!`
+        : `Welcome, ${DEFAULT_USER.fullName}!`
+    );
+    navigate('/');
+  };
+
+  const handleGuestLogin = () => {
+    setUser({
+      id: 'usr-guest-' + Date.now(),
+      fullName: lang === 'uz' ? 'Mehmon xaridor' : lang === 'ru' ? 'Гость' : 'Guest Shopper',
+      phone: '',
+      email: '',
+      avatar: '',
+      city: 'Toshkent',
+      loyaltyTier: 'Standard',
+      points: 0,
+      isGuest: true,
+    });
+    showToast(
+      lang === 'uz'
+        ? 'Mehmon sifatida saytga kirdingiz'
+        : lang === 'ru'
+        ? 'Вы вошли как гость'
+        : 'Browsing as guest'
+    );
+    navigate('/');
+  };
+
   const handleVerifyOtp = (e) => {
     e.preventDefault();
     const code = otpDigits.join('');
@@ -143,12 +178,12 @@ export default function AuthPage({ defaultMode = 'login' }) {
     }
 
     setUser((prev) => ({
-      ...prev,
-      fullName: fullName || prev.fullName,
-      phone: phone || prev.phone,
-      email: email || prev.email,
-      city: city || prev.city,
-      streetAddress: streetAddress || prev.streetAddress,
+      ...(prev || DEFAULT_USER),
+      fullName: fullName || prev?.fullName || (phone ? `Foydalanuvchi (${phone.slice(-4)})` : DEFAULT_USER.fullName),
+      phone: phone || prev?.phone || DEFAULT_USER.phone,
+      email: email || prev?.email || DEFAULT_USER.email,
+      city: city || prev?.city || DEFAULT_USER.city,
+      streetAddress: streetAddress || prev?.streetAddress || DEFAULT_USER.streetAddress,
       isVerified: true,
     }));
 
@@ -174,13 +209,14 @@ export default function AuthPage({ defaultMode = 'login' }) {
 
       {/* Top Navbar: Home, Brand, Live Cart Pill, and Language Switcher */}
       <header className="max-w-5xl w-full mx-auto flex items-center justify-between gap-3 py-2 px-2">
-        <Link
-          to="/"
+        <button
+          type="button"
+          onClick={handleGuestLogin}
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-emerald-700 hover:border-emerald-300 shadow-xs transition"
         >
           <ArrowLeft className="w-4 h-4 text-emerald-600" />
           <span>{t.home}</span>
-        </Link>
+        </button>
 
         <Link to="/" className="flex items-center gap-2 group">
           <img
@@ -633,6 +669,39 @@ export default function AuthPage({ defaultMode = 'login' }) {
                     </button>
                   </>
                 )}
+              </div>
+
+              {/* Quick Demo and Guest Browsing Options */}
+              <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  className="w-full py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition flex items-center justify-center gap-2 border border-emerald-200"
+                >
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  <span>
+                    {lang === 'uz'
+                      ? '1-bosishda tezkor kirish (Temurbek Yoqubov)'
+                      : lang === 'ru'
+                      ? 'Быстрый вход в 1 клик (Темурбек Якубов)'
+                      : 'Quick 1-Click Demo Login'}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleGuestLogin}
+                  className="w-full py-2 rounded-xl text-slate-500 hover:text-emerald-700 hover:bg-slate-50 text-xs font-semibold transition flex items-center justify-center gap-1.5"
+                >
+                  <span>
+                    {lang === 'uz'
+                      ? 'Mehmon sifatida davom etish (Roʻyxatdan oʻtmasdan)'
+                      : lang === 'ru'
+                      ? 'Продолжить как гость (Без регистрации)'
+                      : 'Continue as Guest'}
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </form>
           )}

@@ -536,11 +536,11 @@ export default function MainLayout() {
 
         {/* Horizontal Category Bar + Quick Links */}
         <div className="border-t border-slate-100 bg-white w-full overflow-hidden">
-          <div className="max-w-[1536px] mx-auto px-4 py-2 flex items-center justify-between gap-4 overflow-x-auto no-scrollbar text-xs font-semibold text-slate-600 w-full">
-            <div className="flex items-center gap-1.5">
+          <div className="max-w-[1536px] mx-auto px-4 py-2 flex items-center justify-between gap-4 text-xs font-semibold text-slate-600 w-full">
+            <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
               <Link
                 to="/catalog?flash=true"
-                className="px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-bold shrink-0 hover:bg-rose-100 transition"
+                className="px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-bold shrink-0 hover:bg-rose-100 transition whitespace-nowrap"
               >
                 ⚡ {t.flashSales}
               </Link>
@@ -548,33 +548,33 @@ export default function MainLayout() {
                 <Link
                   key={cat.id}
                   to={`/catalog?category=${cat.slug}`}
-                  className="px-2.5 py-1 rounded-full hover:bg-emerald-50 hover:text-emerald-800 whitespace-nowrap transition"
+                  className="shrink-0 px-2.5 py-1 rounded-full hover:bg-emerald-50 hover:text-emerald-800 whitespace-nowrap transition"
                 >
                   {getLocalizedTitle(cat, lang)}
                 </Link>
               ))}
             </div>
 
-            <div className="hidden lg:flex items-center gap-3 shrink-0 border-l border-slate-200 pl-3">
+            <div className="hidden xl:flex items-center gap-3 shrink-0 border-l border-slate-200 pl-3 bg-white z-10">
               <Link
                 to="/bonus"
-                className="inline-flex items-center gap-1 text-amber-700 hover:text-amber-800 font-bold"
+                className="inline-flex items-center gap-1 text-amber-700 hover:text-amber-800 font-bold whitespace-nowrap"
               >
-                <Gift className="w-3.5 h-3.5 text-amber-500" />
+                <Gift className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 <span>{bonusWallet.pointsBalance.toLocaleString()} Bonus</span>
               </Link>
               <Link
                 to="/seller"
-                className="inline-flex items-center gap-1 text-slate-600 hover:text-emerald-700 font-bold"
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-emerald-700 font-bold whitespace-nowrap"
               >
-                <Store className="w-3.5 h-3.5 text-emerald-600" />
+                <Store className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                 <span>{t.sellerHub}</span>
               </Link>
               <Link
                 to="/admin"
-                className="inline-flex items-center gap-1 text-slate-600 hover:text-emerald-700 font-bold"
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-emerald-700 font-bold whitespace-nowrap"
               >
-                <ShieldAlert className="w-3.5 h-3.5 text-emerald-600" />
+                <ShieldAlert className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                 <span>{t.adminPanel}</span>
               </Link>
             </div>

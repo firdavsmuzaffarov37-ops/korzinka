@@ -20,7 +20,7 @@ import { sounds } from '../utils/soundEffects';
 const MarketplaceContext = createContext(null);
 
 const STORAGE_KEYS = {
-  USER: 'savdox_user_v1',
+  USER: 'savdox_user_v2',
   LANG: 'savdox_lang_v1',
   CITY: 'savdox_city_v1',
   CART: 'savdox_cart_v1',
@@ -38,7 +38,7 @@ const STORAGE_KEYS = {
   COMPARE: 'savdox_compare_v1',
 };
 
-const DEFAULT_USER = {
+export const DEFAULT_USER = {
   id: 'usr-savdox-001',
   fullName: 'Temurbek Yoqubov',
   email: 'temurbek@savdox.uz',
@@ -95,7 +95,7 @@ export function MarketplaceProvider({ children }) {
   const [selectedCity, setSelectedCity] = useState(() =>
     loadFromStorage(STORAGE_KEYS.CITY, UZBEKISTAN_CITIES[0])
   );
-  const [user, setUser] = useState(() => loadFromStorage(STORAGE_KEYS.USER, DEFAULT_USER));
+  const [user, setUser] = useState(() => loadFromStorage(STORAGE_KEYS.USER, null));
   const [categories, setCategories] = useState(() => {
     const cached = loadFromStorage(STORAGE_KEYS.CATEGORIES, null);
     if (
